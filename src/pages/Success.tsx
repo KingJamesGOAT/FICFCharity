@@ -1,0 +1,108 @@
+
+import { useLocation, Link, Navigate } from 'react-router-dom';
+import { CheckCircle, Copy, AlertCircle, ArrowLeft } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+
+
+export const Success = () => {
+  const { t } = useLanguage();
+  const location = useLocation();
+  const { child, formData } = location.state || {}; 
+
+  if (!child) {
+    return <Navigate to="/" />;
+  }
+
+  // Use variables to satisfy linter and personalize
+  const donorName = formData?.name || 'Supporter';
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    alert('IBAN Copied!');
+  };
+
+  return (
+    <div className="min-h-screen bg-background pt-24 pb-20 px-6">
+      <div className="max-w-4xl mx-auto">
+        
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
+            <CheckCircle className="w-10 h-10 text-green-600" />
+          </div>
+          <h1 className="text-5xl font-serif font-bold text-secondary mb-4">{t.success.title}</h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            {t.success.subtitle} <br/>
+            <span className="text-sm mt-2 block text-gray-500">
+              Reference: Sponsorship for <strong>{child.name}</strong> by {donorName}
+            </span>
+          </p>
+        </div>
+
+        {/* Payment Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          {/* Bank Transfer */}
+          <div className="bg-white p-8 rounded-2xl shadow-soft border border-gray-100">
+            <h3 className="font-serif text-2xl font-bold text-secondary mb-6 flex items-center">
+              {t.success.bank_title}
+            </h3>
+            
+            <div className="space-y-6">
+              <div className="aspect-[3/2] bg-gray-50 rounded-xl flex items-center justify-center border border-gray-100">
+                <span className="text-gray-400 font-medium">[QR-Bill Placeholder]</span>
+                 {/* In real app: <img src="/assets/payment/qr-bill.png" alt="QR Bill" /> */}
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-xl flex justify-between items-center">
+                <div className="font-mono text-sm text-gray-600 truncate">
+                  CH93 0000 0000 0000 0000 0
+                </div>
+                <button 
+                  onClick={() => copyToClipboard('CH93 0000 0000 0000 0000 0')}
+                  className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                >
+                  <Copy className="w-4 h-4 text-gray-500" />
+                </button>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Beneficiary: FICF, Case Postale, 1000 Lausanne
+              </p>
+            </div>
+          </div>
+
+          {/* TWINT */}
+          <div className="bg-white p-8 rounded-2xl shadow-soft border border-gray-100">
+            <h3 className="font-serif text-2xl font-bold text-secondary mb-6 flex items-center">
+               {t.success.twint_title}
+            </h3>
+
+            <div className="space-y-6">
+              <div className="aspect-square max-w-[300px] mx-auto bg-gray-50 rounded-xl flex items-center justify-center border border-gray-100">
+                 <span className="text-gray-400 font-medium">[Twint QR Placeholder]</span>
+                 {/* In real app: <img src="/assets/payment/twint.png" alt="Twint QR" /> */}
+              </div>
+
+              <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl flex items-start space-x-3">
+                <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-orange-800 font-medium">
+                  {t.success.twint_alert}
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="mt-12 text-center">
+           <Link to="/" className="inline-flex items-center text-primary font-medium hover:underline">
+             <ArrowLeft className="w-4 h-4 mr-2" />
+             Return to Home
+           </Link>
+        </div>
+
+      </div>
+    </div>
+  );
+};
