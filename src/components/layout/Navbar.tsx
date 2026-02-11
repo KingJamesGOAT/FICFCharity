@@ -18,15 +18,7 @@ export const Navbar = () => {
     { label: t.nav.contact, href: '/contact' },
   ];
 
-  const handleScroll = (href: string) => {
-    setIsMobileMenuOpen(false);
-    if (href.startsWith('#')) {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
+
 
   return (
     <nav
@@ -37,7 +29,17 @@ export const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-serif font-bold tracking-tight text-secondary">
+        {/* Logo */}
+        <Link 
+          to="/" 
+          onClick={(e) => {
+            if (window.location.pathname === '/' || window.location.pathname === '/FICFCharity/') {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
+          className="text-2xl font-serif font-bold tracking-tight text-secondary"
+        >
           FICF
         </Link>
 
@@ -48,15 +50,21 @@ export const Navbar = () => {
               key={link.label}
               to={link.href}
               onClick={(e) => {
-                if (link.href.startsWith('#')) {
-                  e.preventDefault();
-                  // Check if we're on home page for hash scrolling
-                  if (window.location.pathname === '/' || window.location.pathname === '/FICFCharity/') {
-                    handleScroll(link.href);
-                  } else {
-                    // Navigate to home then scroll (simple href approach for now)
-                     window.location.href = '/' + link.href;
+                // Setup for hash checking
+                const isHashLink = link.href.includes('#');
+                if (isHashLink) {
+                  const targetId = link.href.split('#')[1];
+                  const isHomePage = window.location.pathname === '/' || window.location.pathname === '/FICFCharity/';
+                  
+                  if (isHomePage) {
+                    e.preventDefault();
+                    const element = document.getElementById(targetId);
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                      window.history.pushState(null, '', `#${targetId}`);
+                    }
                   }
+                  // If not home, let Link handle the navigation to /#id
                 }
               }}
               className="text-sm font-medium text-gray-600 hover:text-primary transition-colors"
@@ -101,7 +109,19 @@ export const Navbar = () => {
             className="fixed inset-0 bg-white z-[60] flex flex-col p-6"
           >
             <div className="flex justify-between items-center mb-12">
-              <span className="text-2xl font-serif font-bold text-secondary">FICF</span>
+              <span 
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  if (window.location.pathname === '/' || window.location.pathname === '/FICFCharity/') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    window.location.href = '/FICFCharity/';
+                  }
+                }}
+                className="text-2xl font-serif font-bold text-secondary cursor-pointer"
+              >
+                FICF
+              </span>
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2">
                 <X className="w-6 h-6 text-secondary" />
               </button>
@@ -114,12 +134,19 @@ export const Navbar = () => {
                   to={link.href}
                   onClick={(e) => {
                     setIsMobileMenuOpen(false);
-                    if (link.href.startsWith('#')) {
-                      e.preventDefault();
-                      if (window.location.pathname === '/' || window.location.pathname === '/FICFCharity/') {
-                        handleScroll(link.href);
-                      } else {
-                         window.location.href = '/' + link.href;
+                    const isHashLink = link.href.includes('#');
+                    
+                    if (isHashLink) {
+                      const targetId = link.href.split('#')[1];
+                      const isHomePage = window.location.pathname === '/' || window.location.pathname === '/FICFCharity/';
+                      
+                      if (isHomePage) {
+                        e.preventDefault();
+                        const element = document.getElementById(targetId);
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' });
+                          window.history.pushState(null, '', `#${targetId}`);
+                        }
                       }
                     }
                   }}
