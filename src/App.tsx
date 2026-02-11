@@ -8,7 +8,7 @@ import { Success } from './pages/Success';
 function App() {
   return (
     <LanguageProvider>
-      <Router>
+      <Router basename={import.meta.env.BASE_URL}>
         <div className="flex flex-col min-h-screen bg-background text-secondary font-sans antialiased">
           <Navbar />
           <div className="flex-grow">
