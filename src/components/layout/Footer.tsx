@@ -6,7 +6,7 @@ export const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-secondary text-white py-12">
+    <footer id="footer" className="bg-secondary text-white py-12">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
           <span className="font-serif text-2xl font-bold tracking-wide">FICF</span>

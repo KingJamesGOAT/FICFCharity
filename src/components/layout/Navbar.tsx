@@ -14,9 +14,8 @@ export const Navbar = () => {
   const isScrolled = scrollPosition > 20;
 
   const navLinks = [
-    { label: t.nav.home, href: '/' },
+    // Removed Home (logo handles it) and Donate (redundant with Meet) per user request
     { label: t.nav.meet, href: '#catalog' },
-    { label: t.nav.donate, href: '#catalog' }, // Assuming donate leads to grid for now
     { label: t.nav.contact, href: '#footer' },
   ];
 
