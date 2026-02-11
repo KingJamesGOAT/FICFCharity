@@ -32,6 +32,24 @@ export const translations = {
       twint_title: "TWINT Payment",
       twint_alert: "Important: Enter the amount manually in your app.",
     },
+    contact: {
+      title: "Contact Us",
+      swiss_address: {
+        title: "Foundation for Indian Children’s Future",
+        line1: "3186 Duedingen, Switzerland",
+        email: "E-mail: ficfindiaswiss@gmail.com",
+        phone1: "Tel: +41 (0) 76 4502878 (German/French)",
+        phone2: "Tel: + 41 (0) 78 6330596 (English/French)",
+      },
+      india_address: {
+        title: "Foundation for Indian Children’s Future",
+        line1: "16/60/01, Sunaiparai Vilai, Moolachel, Thuckalay Post,",
+        line2: "Kanyakumari District, Tamil Nadu – 629175, India",
+        email: "E-mail: ficfindia@gmail.com",
+        phone: "Tel: 04651 253465",
+        mob: "Mob: 09677785445",
+      },
+    },
   },
   fr: {
     nav: {
@@ -67,6 +85,24 @@ export const translations = {
       twint_alert:
         "Important : Entrez le montant manuellement dans l'application.",
     },
+    contact: {
+      title: "Contactez-nous",
+      swiss_address: {
+        title: "Foundation for Indian Children’s Future",
+        line1: "3186 Guin, Suisse",
+        email: "E-mail: ficfindiaswiss@gmail.com",
+        phone1: "Tél: +41 (0) 76 4502878 (Allemand/Français)",
+        phone2: "Tél: + 41 (0) 78 6330596 (Anglais/Français)",
+      },
+      india_address: {
+        title: "Foundation for Indian Children’s Future",
+        line1: "16/60/01, Sunaiparai Vilai, Moolachel, Thuckalay Post,",
+        line2: "Kanyakumari District, Tamil Nadu – 629175, Inde",
+        email: "E-mail: ficfindia@gmail.com",
+        phone: "Tél: 04651 253465",
+        mob: "Mob: 09677785445",
+      },
+    },
   },
   de: {
     nav: {
@@ -100,6 +136,24 @@ export const translations = {
       bank_title: "Banküberweisung",
       twint_title: "TWINT Zahlung",
       twint_alert: "Wichtig: Betrag manuell in der App eingeben.",
+    },
+    contact: {
+      title: "Kontaktieren Sie uns",
+      swiss_address: {
+        title: "Foundation for Indian Children’s Future",
+        line1: "3186 Düdingen, Schweiz",
+        email: "E-mail: ficfindiaswiss@gmail.com",
+        phone1: "Tel: +41 (0) 76 4502878 (Deutsch/Französisch)",
+        phone2: "Tel: + 41 (0) 78 6330596 (Englisch/Französisch)",
+      },
+      india_address: {
+        title: "Foundation for Indian Children’s Future",
+        line1: "16/60/01, Sunaiparai Vilai, Moolachel, Thuckalay Post,",
+        line2: "Kanyakumari District, Tamil Nadu – 629175, Indien",
+        email: "E-mail: ficfindia@gmail.com",
+        phone: "Tel: 04651 253465",
+        mob: "Mob: 09677785445",
+      },
     },
   },
 };

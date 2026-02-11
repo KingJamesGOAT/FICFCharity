@@ -14,9 +14,8 @@ export const Navbar = () => {
   const isScrolled = scrollPosition > 20;
 
   const navLinks = [
-    // Removed Home (logo handles it) and Donate (redundant with Meet) per user request
-    { label: t.nav.meet, href: '#catalog' },
-    { label: t.nav.contact, href: '#footer' },
+    { label: t.nav.meet, href: '/#catalog' },
+    { label: t.nav.contact, href: '/contact' },
   ];
 
   const handleScroll = (href: string) => {
@@ -45,19 +44,25 @@ export const Navbar = () => {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
-              href={link.href}
+              to={link.href}
               onClick={(e) => {
                 if (link.href.startsWith('#')) {
                   e.preventDefault();
-                  handleScroll(link.href);
+                  // Check if we're on home page for hash scrolling
+                  if (window.location.pathname === '/' || window.location.pathname === '/FICFCharity/') {
+                    handleScroll(link.href);
+                  } else {
+                    // Navigate to home then scroll (simple href approach for now)
+                     window.location.href = '/' + link.href;
+                  }
                 }
               }}
               className="text-sm font-medium text-gray-600 hover:text-primary transition-colors"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
           
           {/* Language Switcher */}
@@ -104,19 +109,24 @@ export const Navbar = () => {
 
             <div className="flex flex-col space-y-6">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   onClick={(e) => {
+                    setIsMobileMenuOpen(false);
                     if (link.href.startsWith('#')) {
                       e.preventDefault();
-                      handleScroll(link.href);
+                      if (window.location.pathname === '/' || window.location.pathname === '/FICFCharity/') {
+                        handleScroll(link.href);
+                      } else {
+                         window.location.href = '/' + link.href;
+                      }
                     }
                   }}
                   className="text-2xl font-serif font-bold text-secondary"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
 
