@@ -26,7 +26,7 @@ export const children: Child[] = [
       fr: "Efshifa est une élève brillante en 5ème classe. Son père est chauffeur et peine avec un salaire journalier. Elle adore les sciences sociales et rêve de devenir enseignante.",
       de: "Efshifa ist eine aufgeweckte Schülerin der 5. Klasse. Ihr Vater ist Fahrer und kämpft mit dem Tageslohn. Sie liebt Sozialkunde und träumt davon, Lehrerin zu werden.",
     },
-    image: "/assets/children/efshifa.jpg",
+    image: "/FICFCharity/assets/children/efshifa.png",
   },
   {
     id: "lizzy",
@@ -39,7 +39,7 @@ export const children: Child[] = [
       fr: "Lizzy est une élève enthousiaste en 1ère classe. Son père est travailleur social et seul soutien de famille, éprouvant des difficultés à payer les frais de scolarité.",
       de: "Lizzy ist eine begeisterte Schülerin der 1. Klasse. Ihr Vater ist Sozialarbeiter und der alleinige Ernährer, der Schwierigkeiten hat, das Schulgeld zu bezahlen.",
     },
-    image: "/assets/children/lizzy.jpg",
+    image: "/FICFCharity/assets/children/lizzy.png",
   },
   {
     id: "nanki",
@@ -52,7 +52,7 @@ export const children: Child[] = [
       fr: "Nanki est semi-orpheline issue d'une famille tribale. Son père est décédé il y a deux ans et sa mère lutte seule pour élever cinq enfants.",
       de: "Nanki ist eine Halbwaise aus einer Stammesfamilie. Ihr Vater starb vor zwei Jahren, und ihre Mutter kämpft allein, um fünf Kinder großzuziehen.",
     },
-    image: "/assets/children/nanki.jpg",
+    image: "/FICFCharity/assets/children/nanki.png",
   },
   {
     id: "raxilin",
@@ -65,7 +65,7 @@ export const children: Child[] = [
       fr: "Le père de Raxilin est décédé d'une crise cardiaque. Sa mère est maintenant travailleuse journalière et peine à éduquer ses deux enfants.",
       de: "Raxilins Vater starb an einem Herzinfarkt. Ihre Mutter ist nun Tagelöhnerin und hat Mühe, ihre zwei Kinder auszubilden.",
     },
-    image: "/assets/children/raxilin.jpg",
+    image: "/FICFCharity/assets/children/raxilin.png",
   },
   {
     id: "arsha",
@@ -78,7 +78,7 @@ export const children: Child[] = [
       fr: "Le père d'Arsha, maçon, est décédé d'une pneumonie. Sa mère fait face à d'immenses défis pour subvenir aux besoins de la famille.",
       de: "Arshas Vater, ein Maurer, starb an einer Lungenentzündung. Ihre Mutter steht vor großen Herausforderungen, die Familie zu versorgen.",
     },
-    image: "/assets/children/arsha.jpg",
+    image: "/FICFCharity/assets/children/arsha.png",
   },
   {
     id: "darshiya",
@@ -91,6 +91,6 @@ export const children: Child[] = [
       fr: "Darshiya aime la peinture et le jardinage. Elle veut devenir médecin (MBBS) pour servir sa communauté. Elle valorise le travail acharné.",
       de: "Darshiya liebt Malen und Gärtnern. Sie möchte Ärztin (MBBS) werden, um ihrer Gemeinschaft zu dienen. Sie schätzt harte Arbeit.",
     },
-    image: "/assets/children/darshiya.jpg",
+    image: "/FICFCharity/assets/children/darshiya.png",
   },
 ];

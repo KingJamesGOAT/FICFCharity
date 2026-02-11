@@ -49,9 +49,12 @@ export const Success = () => {
             </h3>
             
             <div className="space-y-6">
-              <div className="aspect-[3/2] bg-gray-50 rounded-xl flex items-center justify-center border border-gray-100">
-                <span className="text-gray-400 font-medium">[QR-Bill Placeholder]</span>
-                 {/* In real app: <img src="/assets/payment/qr-bill.png" alt="QR Bill" /> */}
+              <div className="aspect-[3/2] bg-gray-50 rounded-xl flex items-center justify-center border border-gray-100 overflow-hidden">
+                <img 
+                  src="/FICFCharity/assets/payment/qr-bill.png" 
+                  alt="QR Bill" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               
               <div className="bg-gray-50 p-4 rounded-xl flex justify-between items-center">
@@ -79,9 +82,12 @@ export const Success = () => {
             </h3>
 
             <div className="space-y-6">
-              <div className="aspect-square max-w-[300px] mx-auto bg-gray-50 rounded-xl flex items-center justify-center border border-gray-100">
-                 <span className="text-gray-400 font-medium">[Twint QR Placeholder]</span>
-                 {/* In real app: <img src="/assets/payment/twint.png" alt="Twint QR" /> */}
+              <div className="aspect-square max-w-[300px] mx-auto bg-gray-50 rounded-xl flex items-center justify-center border border-gray-100 overflow-hidden">
+                 <img 
+                   src="/FICFCharity/assets/payment/twint.png" 
+                   alt="Twint QR" 
+                   className="w-full h-full object-contain" 
+                 />
               </div>
 
               <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl flex items-start space-x-3">
