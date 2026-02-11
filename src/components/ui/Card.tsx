@@ -39,15 +39,15 @@ export const Card = ({ child, onSponsor }: CardProps) => {
       </div>
 
       {/* Content */}
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-serif text-xl font-bold text-secondary line-clamp-1">{child.name}</h3>
-          <span className="text-xs font-semibold bg-orange-100 text-primary px-2 py-1 rounded-full whitespace-nowrap">
+      <div className="p-2 md:p-5 flex flex-col flex-grow">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-1 md:mb-2">
+          <h3 className="font-serif text-sm md:text-lg font-bold text-secondary line-clamp-1">{child.name}</h3>
+          <span className="text-[10px] md:text-xs font-semibold bg-orange-50 md:bg-orange-100 text-primary px-1.5 py-0.5 md:px-2 md:py-1 rounded-full whitespace-nowrap self-start mt-0.5 md:mt-0">
             {child.age} {t.card.age}
           </span>
         </div>
 
-        <div className="space-y-2 mb-6 flex-grow">
+        <div className="space-y-1 mb-2 md:mb-4 flex-grow hidden md:block">
           <div className="flex items-center text-gray-500 text-sm">
             <MapPin className="w-4 h-4 mr-2 text-muted" />
             <span className="truncate">{child.location}</span>
@@ -58,11 +58,13 @@ export const Card = ({ child, onSponsor }: CardProps) => {
           </div>
         </div>
 
+        {/* Mobile only simplified view - maybe just name/age is enough, button below */}
+        
         <Button 
           variant="outline" 
           fullWidth 
           onClick={() => onSponsor(child)}
-          className="group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-colors"
+          className="textxs md:text-sm py-1 md:py-2 h-auto min-h-0 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-colors mt-auto"
         >
           {t.card.sponsor_btn}
         </Button>

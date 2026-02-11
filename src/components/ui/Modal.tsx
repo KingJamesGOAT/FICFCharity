@@ -84,46 +84,50 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 m-auto max-w-5xl h-[fit-content] max-h-[90vh] bg-white rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col md:flex-row"
+            className="fixed inset-0 m-auto w-[95%] max-w-5xl h-[fit-content] max-h-[85vh] bg-white rounded-xl md:rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col md:flex-row"
             onClick={(e) => e.stopPropagation()}
           >
              {/* Close Button */}
              <button 
               onClick={onClose}
-              className="absolute top-4 right-4 p-2 bg-white/50 hover:bg-white rounded-full transition-colors z-10"
+              className="absolute top-2 right-2 md:top-4 md:right-4 p-1.5 md:p-2 bg-white/80 hover:bg-white rounded-full transition-colors z-20 shadow-sm"
             >
-              <X className="w-6 h-6 text-gray-500" />
+              <X className="w-5 h-5 md:w-6 md:h-6 text-gray-500" />
             </button>
 
             {/* Left Col: Child Info */}
-            <div className="w-full md:w-1/3 bg-gray-50 p-8 overflow-y-auto border-r border-gray-100">
-              <div className="aspect-[4/5] rounded-xl overflow-hidden mb-6 shadow-md">
-                <img 
-                  src={child.image} 
-                  alt={child.name} 
-                  className="w-full h-full object-cover"
-                />
+            <div className="w-full md:w-1/3 bg-gray-50 p-4 md:p-8 overflow-y-auto border-b md:border-b-0 md:border-r border-gray-100 max-h-[35vh] md:max-h-full">
+              <div className="flex md:block items-center md:items-start space-x-4 md:space-x-0">
+                <div className="aspect-[4/5] w-20 md:w-full rounded-lg md:rounded-xl overflow-hidden shadow-sm md:shadow-md shrink-0 md:mb-6">
+                  <img 
+                    src={child.image} 
+                    alt={child.name} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-serif text-lg md:text-2xl font-bold text-secondary mb-1 md:mb-2">{child.name}</h3>
+                  <p className="text-xs md:text-sm font-medium text-primary mb-1 md:mb-4">{child.dream}</p>
+                </div>
               </div>
-              <h3 className="font-serif text-2xl font-bold text-secondary mb-2">{child.name}</h3>
-              <p className="text-sm font-medium text-primary mb-4">{child.dream}</p>
-              <p className="text-gray-600 leading-relaxed text-sm">
+              <p className="text-gray-600 leading-relaxed text-xs md:text-sm mt-3 md:mt-0 line-clamp-4 md:line-clamp-none">
                 {child.story[language]}
               </p>
             </div>
 
             {/* Right Col: Form */}
-            <div className="w-full md:w-2/3 p-8 md:p-12 overflow-y-auto">
-              <h2 className="font-serif text-3xl font-bold text-secondary mb-8">
+            <div className="w-full md:w-2/3 p-4 md:p-12 overflow-y-auto">
+              <h2 className="font-serif text-xl md:text-3xl font-bold text-secondary mb-4 md:mb-8 sticky top-0 bg-white z-10 py-2">
                 {t.modal.title}
               </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-8">
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-8 pb-4">
                 {/* Step 1: Amount */}
                 <div className="space-y-4">
-                  <h4 className="font-medium text-gray-900">{t.modal.step1}</h4>
-                  <div className="grid grid-cols-1 gap-4">
+                  <h4 className="font-medium text-gray-900 text-sm md:text-base">{t.modal.step1}</h4>
+                  <div className="grid grid-cols-1 gap-2 md:gap-4">
                     <label className={clsx(
-                      "flex items-center p-4 border rounded-xl cursor-pointer transition-all",
+                      "flex items-center p-3 md:p-4 border rounded-lg md:rounded-xl cursor-pointer transition-all",
                       formData.amount === 'full' ? 'border-primary bg-orange-50 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'
                     )}>
                       <input 
@@ -156,29 +160,29 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
 
                 {/* Step 2: Details */}
                 <div className="space-y-4">
-                  <h4 className="font-medium text-gray-900">{t.modal.step2}</h4>
-                  <div className="grid grid-cols-1 gap-4">
+                  <h4 className="font-medium text-gray-900 text-sm md:text-base">{t.modal.step2}</h4>
+                  <div className="grid grid-cols-1 gap-3 md:gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1">
                         {t.modal.label_name}
                       </label>
                       <input 
                         type="text" 
                         required
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 rounded-md md:rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none text-sm"
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1">
                         {t.modal.label_email}
                       </label>
                       <input 
                         type="email" 
                         required
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                        className="w-full px-3 py-2 md:px-4 md:py-3 rounded-md md:rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none text-sm"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                       />
