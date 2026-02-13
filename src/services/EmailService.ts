@@ -2,16 +2,13 @@ import emailjs from '@emailjs/browser';
 import type { PledgeData } from './StorageService';
 
 // Placeholder Keys - User will replace these
-const SERVICE_ID = 'YOUR_SERVICE_ID';
-const TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-const PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+const SERVICE_ID = 'service_1ti8qkq';
+const TEMPLATE_ID = 'template_ozu98ea';
+const PUBLIC_KEY = '6crwj6TVmkecWjMwj7cfT';
 
 export const EmailService = {
   async sendConfirmation(data: PledgeData): Promise<void> {
-    if (SERVICE_ID === 'YOUR_SERVICE_ID') {
-        console.warn('EmailJS not configured. Email not sent.');
-        return;
-    }
+
 
     try {
       await emailjs.send(
