@@ -50,6 +50,11 @@ export const translations = {
         mob: "Mob: 09677785445",
       },
     },
+    testimonials: [
+      { quote: "Providing a future for these children is the greatest gift we can give.", author: "Sarah M.", role: "Sponsor since 2023" },
+      { quote: "Seeing the smile on my sponsored child's face makes everything worth it.", author: "David K.", role: "Sponsor since 2021" },
+      { quote: "The foundation ensures every dollar goes directly to the children's needs.", author: "Elena R.", role: "Sponsor since 2022" },
+    ],
   },
   fr: {
     nav: {
@@ -103,6 +108,11 @@ export const translations = {
         mob: "Mob: 09677785445",
       },
     },
+    testimonials: [
+      { quote: "Offrir un avenir à ces enfants est le plus beau cadeau que nous puissions faire.", author: "Sarah M.", role: "Marraine depuis 2023" },
+      { quote: "Voir le sourire de mon filleul rend tout cela inestimable.", author: "David K.", role: "Parrain depuis 2021" },
+      { quote: "La fondation garantit que chaque franc va directement aux besoins des enfants.", author: "Elena R.", role: "Marraine depuis 2022" },
+    ],
   },
   de: {
     nav: {
@@ -155,5 +165,10 @@ export const translations = {
         mob: "Mob: 09677785445",
       },
     },
+    testimonials: [
+      { quote: "Diesen Kindern eine Zukunft zu schenken, ist das größte Geschenk, das wir geben können.", author: "Sarah M.", role: "Patin seit 2023" },
+      { quote: "Das Lächeln meines Patenkindes zu sehen, macht alles wert.", author: "David K.", role: "Pate seit 2021" },
+      { quote: "Die Stiftung stellt sicher, dass jeder Franken direkt den Bedürfnissen der Kinder zugute kommt.", author: "Elena R.", role: "Patin seit 2022" },
+    ],
   },
 };

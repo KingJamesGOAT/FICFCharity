@@ -28,6 +28,18 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
     // PRD say: "Payment Method: Bank Transfer OR Twint" in Form Logic.
   });
 
+  // Scroll locking
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   if (!isOpen || !child) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -116,8 +128,8 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
             </div>
 
             {/* Right Col: Form */}
-            <div className="w-full md:w-2/3 p-4 md:p-12 overflow-y-auto">
-              <h2 className="font-serif text-xl md:text-3xl font-bold text-secondary mb-4 md:mb-8 sticky top-0 bg-white z-10 py-2">
+            <div className="w-full md:w-2/3 p-4 md:p-12 overflow-y-auto relative">
+              <h2 className="font-serif text-xl md:text-3xl font-bold text-secondary px-4 py-4 md:px-0 md:py-4 sticky top-0 bg-white/95 backdrop-blur-sm z-10 border-b border-gray-100 mb-4 md:mb-8">
                 {t.modal.title}
               </h2>
 

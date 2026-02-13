@@ -13,7 +13,15 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguageState] = useState<Language>(() => {
+    const saved = localStorage.getItem('ficf-lang');
+    return (saved === 'en' || saved === 'fr' || saved === 'de') ? saved : 'en';
+  });
+
+  const setLanguage = (lang: Language) => {
+    localStorage.setItem('ficf-lang', lang);
+    setLanguageState(lang);
+  };
 
   const value = {
     language,
