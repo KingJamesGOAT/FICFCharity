@@ -84,6 +84,11 @@ export const Hero = () => {
             {t.hero.title}
           </h1>
           
+          <p className="text-lg md:text-xl text-primary font-medium italic -mt-4">
+            {/* @ts-ignore */}
+            {t.hero.tagline}
+          </p>
+          
           <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto lg:mx-0 font-light">
             {t.hero.subtitle}
           </p>

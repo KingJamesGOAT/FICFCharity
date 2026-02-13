@@ -8,6 +8,7 @@ export const translations = {
     },
     hero: {
       title: "Building Futures",
+      tagline: "Offering Hope and Future, Touching Hearts and Transforming Lives and Communities",
       subtitle: "Help us raise CHF 10,000 for 25 children.",
       cta: "Sponsor a Child",
     },
@@ -65,6 +66,7 @@ export const translations = {
     },
     hero: {
       title: "Construire l'Avenir",
+      tagline: "Offrir un Espoir et un Avenir, Toucher les Cœurs et Transformer des Vies et des Communautés",
       subtitle: "Aidez-nous à lever CHF 10'000 pour 25 enfants.",
       cta: "Parrainer",
     },
@@ -123,6 +125,7 @@ export const translations = {
     },
     hero: {
       title: "Zukunft Bauen",
+      tagline: "Hoffnung und Zukunft schenken, Herzen berühren und Leben sowie Gemeinschaften verändern",
       subtitle: "Helfen Sie uns, CHF 10'000 für 25 Kinder zu sammeln.",
       cta: "Pate werden",
     },
