@@ -122,7 +122,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
                   <p className="text-xs md:text-sm font-medium text-primary mb-1 md:mb-4">{child.dream}</p>
                 </div>
               </div>
-              <p className="text-gray-600 leading-relaxed text-xs md:text-sm mt-3 md:mt-0 line-clamp-4 md:line-clamp-none">
+              <p className="text-gray-600 leading-relaxed text-xs md:text-sm mt-3 md:mt-0">
                 {child.story[language]}
               </p>
             </div>
