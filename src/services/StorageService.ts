@@ -13,7 +13,7 @@ export interface PledgeData {
 }
 
 // Placeholder URL - User will replace this with their Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7AIjxEPnlp1xQFS5mVhv_6tHFwkOGeJoBsUQ00Vge-NI2xL89gQb26qMrB9dlwW2j/exec'; 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz55kLFXh9Q7e2YHzvylfKPE0C1t_21rZ_GUX5OEoQx7EY1Skk_GCK2ACFjngWKmekR/exec'; 
 
 export const StorageService = {
   async savePledge(data: PledgeData): Promise<void> {
