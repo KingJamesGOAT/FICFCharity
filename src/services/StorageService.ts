@@ -49,7 +49,7 @@ export const StorageService = {
 
   async getPledges(pin: string): Promise<PledgeData[]> {
       // client-side simple check for now, real check happens if we wanted secure backend
-      if (pin !== '1234') throw new Error('Invalid PIN');
+      if (pin !== '090402') throw new Error('Invalid PIN');
       
 
 
