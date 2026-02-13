@@ -54,6 +54,8 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
         return;
     }
 
+    const refCode = `FICF-${Math.floor(100000 + Math.random() * 900000)}`;
+
     const pledgeData = {
         timestamp: new Date().toISOString(),
         childId: child.id,
@@ -63,7 +65,9 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
         amount: finalAmount,
         type: formData.amountType === 'full' ? 'yearly' : 'one-time',
         taxReceipt: formData.taxReceipt,
-        paymentMethod: formData.paymentMethod
+        paymentMethod: formData.paymentMethod,
+        refCode,
+        language
     } as const;
 
     try {

@@ -8,6 +8,8 @@ export interface PledgeData {
     type: 'yearly' | 'one-time';
     taxReceipt: boolean;
     paymentMethod: string;
+    refCode: string; // New: Unique Reference Code
+    language: string; // New: Language used during pledge
 }
 
 // Placeholder URL - User will replace this with their Google Apps Script Web App URL

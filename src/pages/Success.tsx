@@ -14,7 +14,7 @@ export const Success = () => {
   }
 
   // Use variables to satisfy linter and personalize
-  const donorName = formData?.name || 'Supporter';
+  // const donorName = formData?.name || 'Supporter';
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -33,8 +33,10 @@ export const Success = () => {
           <h1 className="text-5xl font-serif font-bold text-secondary mb-4">{t.success.title}</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             {t.success.subtitle} <br/>
-            <span className="text-sm mt-2 block text-gray-500">
-              Reference: Sponsorship for <strong>{child.name}</strong> by {donorName}
+            <span className="mt-4 block p-4 bg-orange-50 rounded-xl border border-orange-100">
+               <span className="block text-sm text-gray-500 uppercase tracking-wide font-semibold mb-1">Payment Reference</span>
+               <strong className="text-2xl font-mono text-primary">{formData?.refCode || 'N/A'}</strong>
+               <span className="block text-xs text-gray-400 mt-1">Please include this code in your payment remarks</span>
             </span>
           </p>
         </div>
