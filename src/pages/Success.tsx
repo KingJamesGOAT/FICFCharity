@@ -34,9 +34,9 @@ export const Success = () => {
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             {t.success.subtitle} <br/>
             <span className="mt-4 block p-4 bg-orange-50 rounded-xl border border-orange-100">
-               <span className="block text-sm text-gray-500 uppercase tracking-wide font-semibold mb-1">Payment Reference</span>
+               <span className="block text-sm text-gray-500 uppercase tracking-wide font-semibold mb-1">{t.success.payment_reference}</span>
                <strong className="text-2xl font-mono text-primary">{formData?.refCode || 'N/A'}</strong>
-               <span className="block text-xs text-gray-400 mt-1">Please include this code in your payment remarks</span>
+               <span className="block text-xs text-gray-400 mt-1">{t.success.payment_remarks}</span>
             </span>
           </p>
         </div>
@@ -61,10 +61,10 @@ export const Success = () => {
               
               <div className="bg-gray-50 p-4 rounded-xl flex justify-between items-center">
                 <div className="font-mono text-sm text-gray-600 truncate">
-                  CH93 0000 0000 0000 0000 0
+                  CH13 8080 8008 3100 4933 1
                 </div>
                 <button 
-                  onClick={() => copyToClipboard('CH93 0000 0000 0000 0000 0')}
+                  onClick={() => copyToClipboard('CH13 8080 8008 3100 4933 1')}
                   className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
                 >
                   <Copy className="w-4 h-4 text-gray-500" />
@@ -72,7 +72,9 @@ export const Success = () => {
               </div>
 
               <p className="text-sm text-gray-500">
-                Beneficiary: FICF, Case Postale, 1000 Lausanne
+                Beneficiary: FICF - Foundation for Indian Children's Future<br/>
+                Stockera 3<br/>
+                3186 Düdingen
               </p>
             </div>
           </div>

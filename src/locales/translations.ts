@@ -32,6 +32,8 @@ export const translations = {
       bank_title: "Bank Transfer",
       twint_title: "TWINT Payment",
       twint_alert: "Important: Enter the amount manually in your app.",
+      payment_reference: "Payment Reference",
+      payment_remarks: "Please include this code in your payment remarks",
     },
     contact: {
       title: "Contact Us",
@@ -91,6 +93,8 @@ export const translations = {
       twint_title: "Paiement TWINT",
       twint_alert:
         "Important : Entrez le montant manuellement dans l'application.",
+      payment_reference: "Référence de Paiement",
+      payment_remarks: "Veuillez inclure ce code dans vos remarques de paiement",
     },
     contact: {
       title: "Contactez-nous",
@@ -149,6 +153,8 @@ export const translations = {
       bank_title: "Banküberweisung",
       twint_title: "TWINT Zahlung",
       twint_alert: "Wichtig: Betrag manuell in der App eingeben.",
+      payment_reference: "Zahlungsreferenz",
+      payment_remarks: "Bitte geben Sie diesen Code bei Ihrer Zahlung an",
     },
     contact: {
       title: "Kontaktieren Sie uns",

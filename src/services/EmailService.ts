@@ -4,7 +4,7 @@ import type { PledgeData } from './StorageService';
 // Placeholder Keys - User will replace these
 const SERVICE_ID = 'service_1ti8qkq';
 const TEMPLATE_ID = 'template_ozu98ea';
-const PUBLIC_KEY = '6crwj6TVmkecWjMwj7cfT';
+const PUBLIC_KEY = 'HJF2n6CK_DGo8ImBf';
 
 export const EmailService = {
   async sendConfirmation(data: PledgeData): Promise<void> {
