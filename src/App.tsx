@@ -5,6 +5,7 @@ import { Footer } from './components/layout/Footer';
 import { Home } from './pages/Home';
 import { Success } from './pages/Success';
 import { Contact } from './pages/Contact';
+import { AdminDashboard } from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/success" element={<Success />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
           </div>
           <Footer />

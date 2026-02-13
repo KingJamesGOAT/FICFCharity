@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { StorageService } from '../../services/StorageService';
 
 const TestimonialRotator = () => {
     const { t } = useLanguage();
@@ -55,11 +56,15 @@ const TestimonialRotator = () => {
 
 export const Hero = () => {
   const { t } = useLanguage();
+  const [stats, setStats] = useState({ totalRaised: 0, donorCount: 0 });
+
+  useEffect(() => {
+    StorageService.getStats().then(setStats);
+  }, []);
 
   // Progress logic
   const GOAL = 10000;
-  const CURRENT = 0; // Dynamic later?
-  const percentage = Math.min((CURRENT / GOAL) * 100, 100);
+  const percentage = Math.min((stats.totalRaised / GOAL) * 100, 100);
 
   const scrollToCatalog = () => {
     const element = document.getElementById('catalog');
@@ -95,7 +100,7 @@ export const Hero = () => {
 
           <div className="max-w-md mx-auto lg:mx-0 space-y-2">
             <div className="flex justify-between text-sm font-medium text-gray-500">
-              <span>CHF {CURRENT.toLocaleString()}</span>
+              <span>CHF {stats.totalRaised.toLocaleString()}</span>
               <span>CHF {GOAL.toLocaleString()}</span>
             </div>
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
