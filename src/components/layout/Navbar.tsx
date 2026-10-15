@@ -118,11 +118,8 @@ export const Navbar = () => {
                         <img 
                             src="/FICFCharity/assets/HeaderLOGO.jpg" 
                             alt="FICF" 
-                            className="h-9 md:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                            className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                         />
-                        <span className="text-xl md:text-2xl font-serif font-bold tracking-tight text-secondary">
-                            FICF
-                        </span>
                     </Link>
 
                     {/* Desktop Nav */}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, FileText } from 'lucide-react';
+import { X, FileText, Smartphone, CreditCard, Building2, Check } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -28,7 +28,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
     address: '',
     zipCity: '',
     country: 'Switzerland',
-    paymentMethod: 'any',
+    paymentMethod: 'twint', // 'twint' | 'paypal' | 'bank'
   });
 
   // Reset amount when child changes
@@ -376,6 +376,98 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
                         </div>
                       </motion.div>
                     )}
+                  </div>
+                </div>
+
+                {/* Step 3: Preferred Payment Method */}
+                <div className="space-y-2.5 pt-1">
+                  <h4 className="font-semibold text-gray-900 text-xs md:text-sm uppercase tracking-wide">
+                    {t.modal.step3}
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {/* TWINT */}
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: 'twint' })}
+                      className={clsx(
+                        "p-3 rounded-xl border text-left transition-all flex sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-1.5 cursor-pointer",
+                        formData.paymentMethod === 'twint'
+                          ? "border-primary bg-orange-50/80 ring-2 ring-primary shadow-xs"
+                          : "border-gray-200 hover:border-gray-300 bg-white"
+                      )}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <Smartphone className={clsx("w-4 h-4 shrink-0", formData.paymentMethod === 'twint' ? "text-primary" : "text-gray-400")} />
+                        <span className="font-bold text-xs md:text-sm text-secondary">
+                          {t.modal.payment_twint}
+                        </span>
+                      </div>
+                      <span className="text-[11px] text-gray-500 leading-tight hidden sm:block">
+                        {t.modal.payment_twint_sub}
+                      </span>
+                      <div className={clsx(
+                        "w-4 h-4 rounded-full border flex items-center justify-center shrink-0",
+                        formData.paymentMethod === 'twint' ? "border-primary bg-primary text-white" : "border-gray-300"
+                      )}>
+                        {formData.paymentMethod === 'twint' && <Check className="w-2.5 h-2.5 stroke-[3]" />}
+                      </div>
+                    </button>
+
+                    {/* PayPal / Card */}
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: 'paypal' })}
+                      className={clsx(
+                        "p-3 rounded-xl border text-left transition-all flex sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-1.5 cursor-pointer",
+                        formData.paymentMethod === 'paypal'
+                          ? "border-primary bg-orange-50/80 ring-2 ring-primary shadow-xs"
+                          : "border-gray-200 hover:border-gray-300 bg-white"
+                      )}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <CreditCard className={clsx("w-4 h-4 shrink-0", formData.paymentMethod === 'paypal' ? "text-primary" : "text-gray-400")} />
+                        <span className="font-bold text-xs md:text-sm text-secondary">
+                          {t.modal.payment_paypal}
+                        </span>
+                      </div>
+                      <span className="text-[11px] text-gray-500 leading-tight hidden sm:block">
+                        {t.modal.payment_paypal_sub}
+                      </span>
+                      <div className={clsx(
+                        "w-4 h-4 rounded-full border flex items-center justify-center shrink-0",
+                        formData.paymentMethod === 'paypal' ? "border-primary bg-primary text-white" : "border-gray-300"
+                      )}>
+                        {formData.paymentMethod === 'paypal' && <Check className="w-2.5 h-2.5 stroke-[3]" />}
+                      </div>
+                    </button>
+
+                    {/* Swiss Bank QR-Bill */}
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: 'bank' })}
+                      className={clsx(
+                        "p-3 rounded-xl border text-left transition-all flex sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-1.5 cursor-pointer",
+                        formData.paymentMethod === 'bank'
+                          ? "border-primary bg-orange-50/80 ring-2 ring-primary shadow-xs"
+                          : "border-gray-200 hover:border-gray-300 bg-white"
+                      )}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <Building2 className={clsx("w-4 h-4 shrink-0", formData.paymentMethod === 'bank' ? "text-primary" : "text-gray-400")} />
+                        <span className="font-bold text-xs md:text-sm text-secondary">
+                          {t.modal.payment_bank}
+                        </span>
+                      </div>
+                      <span className="text-[11px] text-gray-500 leading-tight hidden sm:block">
+                        {t.modal.payment_bank_sub}
+                      </span>
+                      <div className={clsx(
+                        "w-4 h-4 rounded-full border flex items-center justify-center shrink-0",
+                        formData.paymentMethod === 'bank' ? "border-primary bg-primary text-white" : "border-gray-300"
+                      )}>
+                        {formData.paymentMethod === 'bank' && <Check className="w-2.5 h-2.5 stroke-[3]" />}
+                      </div>
+                    </button>
                   </div>
                 </div>
 
