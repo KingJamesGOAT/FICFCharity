@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, FileText, Smartphone, CreditCard, Building2, Check } from 'lucide-react';
+import { X, FileText, Smartphone, Wallet, Building2, Check } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -425,7 +425,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
                       )}
                     >
                       <div className="flex items-center space-x-2">
-                        <CreditCard className={clsx("w-4 h-4 shrink-0", formData.paymentMethod === 'paypal' ? "text-primary" : "text-gray-400")} />
+                        <Wallet className={clsx("w-4 h-4 shrink-0", formData.paymentMethod === 'paypal' ? "text-primary" : "text-gray-400")} />
                         <span className="font-bold text-xs md:text-sm text-secondary">
                           {t.modal.payment_paypal}
                         </span>

@@ -14,7 +14,7 @@ export const EmailService = {
     const paymentInfo = {
       en: `
         <h3>How to Complete Your Payment:</h3>
-        <p><strong>1. PayPal / Credit Card:</strong> <a href="${paypalUrl}" style="color: #e15b00; font-weight: bold;">Click here to pay via PayPal or Card</a></p>
+        <p><strong>1. PayPal:</strong> <a href="${paypalUrl}" style="color: #e15b00; font-weight: bold;">Click here to pay via PayPal</a></p>
         <p><strong>2. TWINT:</strong> Pay via your TWINT app and include the reference code below in the remarks.</p>
         <p><strong>3. Swiss Bank Transfer:</strong><br/>
            <strong>IBAN:</strong> CH13 8080 8008 3100 4933 1<br/>
@@ -25,23 +25,23 @@ export const EmailService = {
       `,
       fr: `
         <h3>Comment finaliser votre paiement :</h3>
-        <p><strong>1. PayPal / Carte bancaire :</strong> <a href="${paypalUrl}" style="color: #e15b00; font-weight: bold;">Cliquez ici pour payer par PayPal ou Carte</a></p>
+        <p><strong>1. PayPal :</strong> <a href="${paypalUrl}" style="color: #e15b00; font-weight: bold;">Cliquez ici pour payer via PayPal</a></p>
         <p><strong>2. TWINT :</strong> Réglez via l'application TWINT en indiquant votre code de référence en remarque.</p>
         <p><strong>3. Virement Bancaire Suisse :</strong><br/>
            <strong>IBAN :</strong> CH13 8080 8008 3100 4933 1<br/>
            <strong>Banque :</strong> Raiffeisenbank Freiburg Ost / Fribourg-Est (BIC: RAIFCH22XXX)<br/>
-           <strong>Bénéficiaire :</strong> FICF - Foundation for Indian Children's Future<br/>
+           <strong>Bénéficiaire :</strong> FICF - Fondation pour l'Avenir des Enfants de l'Inde<br/>
            <strong>Adresse :</strong> Stockera 3, 3186 Guin / Düdingen, Suisse
         </p>
       `,
       de: `
         <h3>So schliessen Sie Ihre Zahlung ab:</h3>
-        <p><strong>1. PayPal / Kreditkarte:</strong> <a href="${paypalUrl}" style="color: #e15b00; font-weight: bold;">Hier klicken für Zahlung per PayPal oder Karte</a></p>
+        <p><strong>1. PayPal:</strong> <a href="${paypalUrl}" style="color: #e15b00; font-weight: bold;">Hier klicken für Zahlung via PayPal</a></p>
         <p><strong>2. TWINT:</strong> Zahlung über TWINT mit Angabe des untenstehenden Referenzcodes.</p>
         <p><strong>3. Schweizer Banküberweisung :</strong><br/>
            <strong>IBAN:</strong> CH13 8080 8008 3100 4933 1<br/>
            <strong>Bank:</strong> Raiffeisenbank Freiburg Ost / Fribourg-Est (BIC: RAIFCH22XXX)<br/>
-           <strong>Begünstigter:</strong> FICF - Foundation for Indian Children's Future<br/>
+           <strong>Begünstigter:</strong> FICF - Stiftung für die Zukunft indischer Kinder<br/>
            <strong>Adresse:</strong> Stockera 3, 3186 Düdingen, Schweiz
         </p>
       `

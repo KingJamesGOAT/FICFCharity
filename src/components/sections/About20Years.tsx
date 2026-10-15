@@ -44,7 +44,7 @@ export const About20Years = () => {
               </p>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-200/50 text-[11px] font-semibold text-primary">
-              CHF 30 / month • CHF 360 / year
+              {info.ccp_sub}
             </div>
           </motion.div>
 
@@ -65,7 +65,7 @@ export const About20Years = () => {
               </p>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-200/50 text-[11px] font-semibold text-amber-700">
-              CHF 50 / month • CHF 600 / year (25 kids)
+              {info.tnp_sub}
             </div>
           </motion.div>
 
@@ -86,7 +86,7 @@ export const About20Years = () => {
               </p>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-200/50 text-[11px] font-semibold text-emerald-700">
-              Medical Camps • Seed Supply • Disaster Relief
+              {info.cdp_sub}
             </div>
           </motion.div>
 
@@ -103,7 +103,7 @@ export const About20Years = () => {
                 {info.brochures_title}
               </h4>
               <p className="text-xs text-gray-600">
-                Read our official reports and detailed breakdown of programs and budget allocation.
+                {info.brochures_desc}
               </p>
             </div>
           </div>

@@ -7,7 +7,7 @@ import {
   ArrowLeft, 
   ExternalLink, 
   Download, 
-  CreditCard, 
+  Wallet, 
   Building2, 
   Smartphone,
   Info
@@ -139,7 +139,7 @@ export const Success = () => {
               <span className="truncate">{t.success.method_twint}</span>
             </button>
 
-            {/* PayPal / Card */}
+            {/* PayPal */}
             <button
               onClick={() => setActiveMethod('paypal')}
               className={clsx(
@@ -149,7 +149,7 @@ export const Success = () => {
                   : "text-gray-600 hover:text-secondary"
               )}
             >
-              <CreditCard className={clsx("w-4 h-4 shrink-0", activeMethod === 'paypal' ? "text-primary" : "text-gray-400")} />
+              <Wallet className={clsx("w-4 h-4 shrink-0", activeMethod === 'paypal' ? "text-primary" : "text-gray-400")} />
               <span className="truncate">{t.success.method_paypal}</span>
             </button>
 
@@ -184,12 +184,12 @@ export const Success = () => {
                 </p>
               </div>
 
-              {/* Big, Crisp TWINT QR Code */}
+              {/* Big, Crisp TWINT QR Code using twint.png */}
               <div className="p-3 bg-white rounded-2xl border-2 border-orange-100 inline-block shadow-sm">
                 <img 
-                  src="/FICFCharity/assets/payment/twint.jpg" 
+                  src="/FICFCharity/assets/payment/twint.png" 
                   alt="TWINT QR Code" 
-                  className="w-56 h-auto sm:w-64 md:w-72 object-contain mx-auto rounded-lg"
+                  className="w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 object-contain mx-auto rounded-lg"
                 />
               </div>
 
@@ -206,7 +206,7 @@ export const Success = () => {
                       <strong className="font-mono text-primary text-xs font-bold">{refCode}</strong>
                       <button 
                         onClick={() => copyToClipboard(refCode, 'ref')}
-                        className="p-1 hover:bg-orange-200/60 rounded transition-colors"
+                        className="p-1 hover:bg-orange-200/60 rounded transition-colors cursor-pointer"
                         title="Copy Reference"
                       >
                         <Copy className="w-3.5 h-3.5 text-primary" />
@@ -222,7 +222,7 @@ export const Success = () => {
             </div>
           )}
 
-          {/* METHOD 2: PayPal / Credit Card */}
+          {/* METHOD 2: PayPal */}
           {activeMethod === 'paypal' && (
             <div className="text-center space-y-6">
               <div>
@@ -247,7 +247,7 @@ export const Success = () => {
                 </a>
               </div>
 
-              {/* Big PayPal QR Code for Desktop or Smartphone Camera */}
+              {/* Big PayPal QR Code using paypal.png */}
               <div className="pt-2">
                 <span className="block text-xs text-gray-500 mb-3">
                   {t.success.paypal_qr_hint}
@@ -267,7 +267,7 @@ export const Success = () => {
                 <strong className="font-mono text-secondary font-bold">{refCode}</strong>
                 <button 
                   onClick={() => copyToClipboard(refCode, 'ref')}
-                  className="p-1 hover:bg-gray-200 rounded transition-colors"
+                  className="p-1 hover:bg-gray-200 rounded transition-colors cursor-pointer"
                   title="Copy Reference"
                 >
                   <Copy className="w-3.5 h-3.5 text-gray-500" />
@@ -288,11 +288,11 @@ export const Success = () => {
                 </p>
               </div>
 
-              {/* BIG, CLEAR Cropped Swiss QR Code */}
+              {/* BIG, CLEAR Swiss QR-Bill using qr-bill.png */}
               <div className="p-3 bg-white rounded-2xl border-2 border-gray-200 inline-block shadow-sm">
                 <img 
-                  src="/FICFCharity/assets/payment/qr-swiss-code.jpg" 
-                  alt="Swiss QR Code with Cross" 
+                  src="/FICFCharity/assets/payment/qr-bill.png" 
+                  alt="Swiss QR Bill" 
                   className="w-56 h-auto sm:w-64 md:w-72 object-contain mx-auto rounded"
                 />
               </div>
@@ -308,7 +308,7 @@ export const Success = () => {
                   </div>
                   <button 
                     onClick={() => copyToClipboard('CH13 8080 8008 3100 4933 1', 'iban')}
-                    className="py-1.5 px-3 bg-white border border-gray-200 hover:bg-gray-100 rounded-xl text-xs font-semibold text-secondary transition-colors flex items-center space-x-1.5 shadow-2xs"
+                    className="py-1.5 px-3 bg-white border border-gray-200 hover:bg-gray-100 rounded-xl text-xs font-semibold text-secondary transition-colors flex items-center space-x-1.5 shadow-2xs cursor-pointer"
                   >
                     {copiedIBAN ? (
                       <>
@@ -337,8 +337,8 @@ export const Success = () => {
               {/* Download Full QR Bill */}
               <div className="pt-2">
                 <a 
-                  href="/FICFCharity/assets/payment/qr-bill.jpg" 
-                  download="FICF_Swiss_QR_Bill.jpg"
+                  href="/FICFCharity/assets/payment/qr-bill.png" 
+                  download="FICF_Swiss_QR_Bill.png"
                   className="inline-flex items-center justify-center py-2.5 px-5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-xl transition-colors shadow-2xs"
                 >
                   <Download className="w-3.5 h-3.5 mr-2 text-primary" />
