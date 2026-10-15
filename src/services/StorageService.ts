@@ -4,12 +4,16 @@ export interface PledgeData {
     childName: string;
     donorName: string;
     email: string;
+    phone?: string;
+    address?: string;
+    zipCity?: string;
+    country?: string;
     amount: number;
     type: 'yearly' | 'one-time';
     taxReceipt: boolean;
     paymentMethod: string;
-    refCode: string; // New: Unique Reference Code
-    language: string; // New: Language used during pledge
+    refCode: string; // Unique Reference Code
+    language: string; // Language used during pledge
 }
 
 // Placeholder URL - User will replace this with their Google Apps Script Web App URL

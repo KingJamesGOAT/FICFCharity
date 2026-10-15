@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StorageService, type PledgeData } from '../services/StorageService';
-import { Lock, Unlock, Download } from 'lucide-react';
+import { Lock, Unlock, Download, QrCode, ExternalLink } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const AdminDashboard = () => {
@@ -10,6 +10,10 @@ export const AdminDashboard = () => {
     const [stats, setStats] = useState({ totalRaised: 0, donorCount: 0 });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showEventQR, setShowEventQR] = useState(false);
+
+    const siteUrl = "https://kingjamesgoat.github.io/FICFCharity/";
+    const qrGeneratorUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(siteUrl)}`;
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -20,10 +24,8 @@ export const AdminDashboard = () => {
             setPledges(data);
             setIsAuthenticated(true);
             
-            // Calculate stats locally or use the fetched ones if we fetched them separate
             const total = data.reduce((acc, curr) => acc + curr.amount, 0);
             setStats({ totalRaised: total, donorCount: data.length });
-
         } catch (err) {
             setError('Invalid PIN or Connection Error');
         } finally {
@@ -33,18 +35,22 @@ export const AdminDashboard = () => {
 
     const exportToCSV = () => {
         if (!pledges.length) return;
-        const headers = ["Date", "Name", "Email", "Child", "Amount", "Type", "Receipt", "Payment"];
+        const headers = ["Date", "Name", "Email", "Phone", "Address", "Postal Code & City", "Country", "Child", "Amount (CHF)", "Type", "Receipt", "RefCode"];
         const csvContent = [
             headers.join(','),
             ...pledges.map(p => [
                 new Date(p.timestamp).toLocaleDateString(),
                 `"${p.donorName}"`,
                 p.email,
+                `"${p.phone || ''}"`,
+                `"${p.address || ''}"`,
+                `"${p.zipCity || ''}"`,
+                `"${p.country || ''}"`,
                 `"${p.childName}"`,
                 p.amount,
                 p.type,
                 p.taxReceipt ? "Yes" : "No",
-                p.paymentMethod
+                p.refCode || ''
             ].join(','))
         ].join('\n');
 
@@ -78,13 +84,26 @@ export const AdminDashboard = () => {
                             onChange={(e) => setPin(e.target.value)}
                             maxLength={8}
                         />
-                        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-                        <button 
-                            type="submit" 
-                            className="w-full py-3 bg-secondary text-white rounded-lg font-medium hover:bg-secondary/90 transition-colors disabled:opacity-50"
-                            disabled={loading}
+                        
+                        {error && (
+                            <p className="text-red-500 text-sm text-center font-medium animate-shake">
+                                {error}
+                            </p>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading || !pin}
+                            className="w-full bg-primary hover:bg-primary-hover text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
                         >
-                            {loading ? 'Verifying...' : 'Unlock Dashboard'}
+                            {loading ? (
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                <>
+                                    <Unlock className="w-4 h-4" />
+                                    <span>Unlock Dashboard</span>
+                                </>
+                            )}
                         </button>
                     </form>
                 </div>
@@ -93,28 +112,67 @@ export const AdminDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto space-y-8">
                 
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div>
-                        <h1 className="text-3xl font-bold text-secondary flex items-center gap-3">
-                            <Unlock className="w-8 h-8 text-primary" />
-                            Dashboard
-                        </h1>
-                        <p className="text-gray-500 mt-1">Live overview of sponsorship campaign</p>
+                        <h1 className="text-2xl font-serif font-bold text-secondary">FICF Admin Dashboard</h1>
+                        <p className="text-sm text-gray-500">Live pledge tracking and event management</p>
                     </div>
-                    <button 
-                        onClick={exportToCSV}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
-                    >
-                        <Download className="w-4 h-4" />
-                        Export CSV
-                    </button>
+                    <div className="flex flex-wrap items-center gap-3">
+                        <button 
+                            onClick={() => setShowEventQR(!showEventQR)}
+                            className="inline-flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl text-sm font-medium transition-colors"
+                        >
+                            <QrCode className="w-4 h-4 text-primary" />
+                            <span>{showEventQR ? "Hide Event QR" : "Show Event QR"}</span>
+                        </button>
+                        <button 
+                            onClick={exportToCSV}
+                            disabled={!pledges.length}
+                            className="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-colors disabled:opacity-50"
+                        >
+                            <Download className="w-4 h-4" />
+                            <span>Export CSV</span>
+                        </button>
+                    </div>
                 </div>
 
-                {/* Stats Cards */}
+                {/* Event QR Code Card */}
+                {showEventQR && (
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-orange-200 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="flex items-center space-x-6">
+                            <div className="w-32 h-32 bg-white p-2 rounded-xl border border-gray-200 shadow-xs shrink-0">
+                                <img src={qrGeneratorUrl} alt="Event QR Code" className="w-full h-full object-contain" />
+                            </div>
+                            <div>
+                                <h3 className="font-serif text-lg font-bold text-secondary">Official Event QR Code</h3>
+                                <p className="text-xs text-gray-500 mb-2">Scan with any mobile camera to open the FICF sponsorship catalog.</p>
+                                <a 
+                                    href={siteUrl} 
+                                    target="_blank" 
+                                    rel="noreferrer"
+                                    className="inline-flex items-center text-xs text-primary font-mono hover:underline"
+                                >
+                                    <span>{siteUrl}</span>
+                                    <ExternalLink className="w-3 h-3 ml-1" />
+                                </a>
+                            </div>
+                        </div>
+                        <a 
+                            href={qrGeneratorUrl} 
+                            target="_blank" 
+                            download="FICF_Event_QR.png" 
+                            className="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-xl transition-colors shadow-xs"
+                        >
+                            Download High-Res QR
+                        </a>
+                    </div>
+                )}
+
+                {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-orange-100">
                         <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Raised</p>
@@ -139,8 +197,8 @@ export const AdminDashboard = () => {
                         <table className="w-full text-left">
                             <thead className="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    {["Date", "Donor", "Child", "Amount", "Type", "Receipt", "Contact"].map(head => (
-                                        <th key={head} className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                    {["Date", "Ref", "Donor", "Child", "Amount", "Type", "Receipt", "Email", "Phone", "Address"].map(head => (
+                                        <th key={head} className="px-4 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">
                                             {head}
                                         </th>
                                     ))}
@@ -149,38 +207,47 @@ export const AdminDashboard = () => {
                             <tbody className="divide-y divide-gray-100">
                                 {pledges.length === 0 ? (
                                     <tr>
-                                        <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
+                                        <td colSpan={10} className="px-6 py-12 text-center text-gray-400">
                                             No pledges found yet.
                                         </td>
                                     </tr>
                                 ) : (
                                     pledges.map((pledge, idx) => (
-                                        <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                                            <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                                        <tr key={idx} className="hover:bg-gray-50/50 transition-colors text-xs md:text-sm">
+                                            <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
                                                 {new Date(pledge.timestamp).toLocaleDateString()}
                                             </td>
-                                            <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                                            <td className="px-4 py-3 font-mono text-primary font-semibold whitespace-nowrap">
+                                                {pledge.refCode || '-'}
+                                            </td>
+                                            <td className="px-4 py-3 font-medium text-gray-900">
                                                 {pledge.donorName}
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-gray-600">
+                                            <td className="px-4 py-3 text-gray-600">
                                                 {pledge.childName}
                                             </td>
-                                            <td className="px-6 py-4 text-sm font-bold text-secondary">
+                                            <td className="px-4 py-3 font-bold text-secondary whitespace-nowrap">
                                                 CHF {pledge.amount}
                                             </td>
-                                            <td className="px-6 py-4 text-sm">
+                                            <td className="px-4 py-3 whitespace-nowrap">
                                                 <span className={clsx(
-                                                    "px-2 py-1 rounded-full text-xs font-medium",
+                                                    "px-2 py-0.5 rounded-full text-xs font-medium",
                                                     pledge.type === 'yearly' ? "bg-purple-100 text-purple-700" : "bg-blue-100 text-blue-700"
                                                 )}>
                                                     {pledge.type === 'yearly' ? 'Yearly' : 'One-time'}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-gray-500">
+                                            <td className="px-4 py-3 text-center">
                                                 {pledge.taxReceipt ? "✅" : "-"}
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-gray-500">
+                                            <td className="px-4 py-3 text-gray-500">
                                                 {pledge.email}
+                                            </td>
+                                            <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
+                                                {pledge.phone || '-'}
+                                            </td>
+                                            <td className="px-4 py-3 text-gray-500 max-w-xs truncate" title={`${pledge.address || ''} ${pledge.zipCity || ''}`}>
+                                                {pledge.address ? `${pledge.address}, ${pledge.zipCity}` : '-'}
                                             </td>
                                         </tr>
                                     ))

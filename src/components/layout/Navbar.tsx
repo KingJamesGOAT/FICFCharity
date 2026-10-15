@@ -18,6 +18,7 @@ export const Navbar = () => {
 
     const navLinks = [
         { label: t.nav.meet, href: '/#catalog' },
+        { label: t.nav.about, href: '/#about' },
         { label: t.nav.contact, href: '/contact' },
     ];
 
@@ -29,15 +30,23 @@ export const Navbar = () => {
         }
 
         const handleScroll = () => {
+            const aboutSection = document.getElementById('about');
             const catalogSection = document.getElementById('catalog');
-            if (catalogSection) {
-                const rect = catalogSection.getBoundingClientRect();
-                if (rect.top <= 150 && rect.bottom >= 100) {
-                    setActiveSection('meet');
-                } else {
-                    setActiveSection('');
+            if (aboutSection) {
+                const rect = aboutSection.getBoundingClientRect();
+                if (rect.top <= 200 && rect.bottom >= 100) {
+                    setActiveSection('about');
+                    return;
                 }
             }
+            if (catalogSection) {
+                const rect = catalogSection.getBoundingClientRect();
+                if (rect.top <= 200 && rect.bottom >= 100) {
+                    setActiveSection('meet');
+                    return;
+                }
+            }
+            setActiveSection('');
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -73,6 +82,9 @@ export const Navbar = () => {
         }
         if (linkHref.includes('#catalog')) {
             return activeSection === 'meet';
+        }
+        if (linkHref.includes('#about')) {
+            return activeSection === 'about';
         }
         return false;
     };

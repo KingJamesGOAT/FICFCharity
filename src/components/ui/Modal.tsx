@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
-// import emailjs from '@emailjs/browser';
+import { X, FileText } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -20,16 +19,31 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
-    amountType: 'full', // 'full' | 'any'
+    amountType: 'yearly', // 'yearly' | 'custom'
     customAmount: '',
     name: '',
     email: '',
+    phone: '',
     taxReceipt: false,
-    paymentMethod: 'bank',
+    address: '',
+    zipCity: '',
+    country: 'Switzerland',
+    paymentMethod: 'any',
   });
 
+  // Reset amount when child changes
+  useEffect(() => {
+    if (child) {
+      setFormData(prev => ({
+        ...prev,
+        amountType: 'yearly',
+        customAmount: '',
+      }));
+    }
+  }, [child]);
+
   // Scroll locking
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -42,51 +56,54 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
 
   if (!isOpen || !child) return null;
 
+  const recommendedAmount = child.recommendedAmount || 360;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const finalAmount = formData.amountType === 'full' ? 360 : Number(formData.customAmount);
+    const finalAmount = formData.amountType === 'yearly' 
+      ? recommendedAmount 
+      : Number(formData.customAmount);
 
-    if (finalAmount <= 0) {
-        alert("Please enter a valid amount greater than 0.");
-        setIsSubmitting(false);
-        return;
+    if (finalAmount <= 0 || isNaN(finalAmount)) {
+      alert("Please enter a valid contribution amount greater than 0.");
+      setIsSubmitting(false);
+      return;
     }
 
     const refCode = `FICF-${Math.floor(100000 + Math.random() * 900000)}`;
 
     const pledgeData = {
-        timestamp: new Date().toISOString(),
-        childId: child.id,
-        childName: child.name,
-        donorName: formData.name,
-        email: formData.email,
-        amount: finalAmount,
-        type: formData.amountType === 'full' ? 'yearly' : 'one-time',
-        taxReceipt: formData.taxReceipt,
-        paymentMethod: formData.paymentMethod,
-        refCode,
-        language
+      timestamp: new Date().toISOString(),
+      childId: child.id,
+      childName: child.name,
+      donorName: formData.name,
+      email: formData.email,
+      phone: formData.phone || '',
+      address: formData.address || '',
+      zipCity: formData.zipCity || '',
+      country: formData.country || 'Switzerland',
+      amount: finalAmount,
+      type: formData.amountType === 'yearly' ? 'yearly' : 'one-time',
+      taxReceipt: formData.taxReceipt,
+      paymentMethod: formData.paymentMethod,
+      refCode,
+      language
     } as const;
 
     try {
       // 1. Save to Google Sheet
-      // We dynamically import to avoid circular dependencies if any, though here it's fine direct import
       const { StorageService } = await import('../../services/StorageService');
       await StorageService.savePledge(pledgeData);
 
-      // 2. Send Email
+      // 2. Send confirmation Email
       const { EmailService } = await import('../../services/EmailService');
       await EmailService.sendConfirmation(pledgeData);
       
       navigate('/success', { state: { child, formData: pledgeData } });
     } catch (error) {
-      console.error('Failed to process pledge:', error);
-      // Even if backend fails (e.g. CORS on simple trigger), we often want to show success to user 
-      // but ideally we'd show a real error. For now, let's assume if savePledge throws, it's real.
-      // But opaque response from no-cors means we might not know.
-      // We will navigate to success anyway for the user experience, unless it's a critical logic error.
+      console.error('Pledge submission processed with fallback navigation:', error);
       navigate('/success', { state: { child, formData: pledgeData } });
     } finally {
       setIsSubmitting(false);
@@ -103,7 +120,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
             onClick={onClose}
           />
           
@@ -112,21 +129,22 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 m-auto w-[95%] max-w-5xl h-[fit-content] max-h-[85vh] bg-white rounded-xl md:rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col md:flex-row"
+            className="fixed inset-0 m-auto w-[94%] max-w-4xl max-h-[92vh] bg-white rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col md:flex-row"
             onClick={(e) => e.stopPropagation()}
           >
-             {/* Close Button */}
-             <button 
+            {/* Close Button */}
+            <button 
               onClick={onClose}
-              className="absolute top-2 right-2 md:top-4 md:right-4 p-1.5 md:p-2 bg-white/80 hover:bg-white rounded-full transition-colors z-20 shadow-sm"
+              className="absolute top-3 right-3 md:top-4 md:right-4 p-2 bg-white/90 hover:bg-gray-100 rounded-full transition-colors z-30 shadow-md text-gray-600 hover:text-black"
+              aria-label="Close"
             >
-              <X className="w-5 h-5 md:w-6 md:h-6 text-gray-500" />
+              <X className="w-5 h-5" />
             </button>
 
-            {/* Left Col: Child Info */}
-            <div className="w-full md:w-1/3 bg-gray-50 p-4 md:p-8 overflow-y-auto border-b md:border-b-0 md:border-r border-gray-100 max-h-[35vh] md:max-h-full">
-              <div className="flex md:block items-center md:items-start space-x-4 md:space-x-0">
-                <div className="aspect-[4/5] w-20 md:w-full rounded-lg md:rounded-xl overflow-hidden shadow-sm md:shadow-md shrink-0 md:mb-6">
+            {/* Left Col: Child Info & Story */}
+            <div className="w-full md:w-5/12 bg-gray-50 p-4 md:p-6 overflow-y-auto border-b md:border-b-0 md:border-r border-gray-100 max-h-[32vh] md:max-h-full">
+              <div className="flex items-center space-x-3 md:block md:space-x-0">
+                <div className="aspect-[4/5] w-20 md:w-full rounded-xl overflow-hidden shadow-sm shrink-0 md:mb-4 bg-gray-200">
                   <img 
                     src={child.image} 
                     alt={child.name} 
@@ -134,117 +152,231 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg md:text-2xl font-bold text-secondary mb-1 md:mb-2">{child.name}</h3>
-                  <p className="text-xs md:text-sm font-medium text-primary mb-1 md:mb-4">{child.dream}</p>
+                  <span className="text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-primary inline-block mb-1">
+                    {child.category === 'university' ? t.card.higher_ed : t.card.school_ed}
+                  </span>
+                  <h3 className="font-serif text-base md:text-2xl font-bold text-secondary">
+                    {child.name}
+                  </h3>
+                  <p className="text-xs md:text-sm text-gray-500 font-medium">{child.education}</p>
                 </div>
               </div>
-              <p className="text-gray-600 leading-relaxed text-xs md:text-sm mt-3 md:mt-0">
-                {child.story[language]}
-              </p>
+
+              <div className="mt-3 md:mt-4 pt-3 border-t border-gray-200/60">
+                <p className="text-gray-700 leading-relaxed text-xs md:text-sm whitespace-pre-line">
+                  {child.story[language] || child.story.en}
+                </p>
+              </div>
             </div>
 
-            {/* Right Col: Form */}
-            <div className="w-full md:w-2/3 p-4 md:p-12 overflow-y-auto relative">
-              <h2 className="font-serif text-xl md:text-3xl font-bold text-secondary px-4 py-4 md:px-0 md:py-4 sticky top-0 bg-white/95 backdrop-blur-sm z-10 border-b border-gray-100 mb-4 md:mb-8">
-                {t.modal.title}
-              </h2>
+            {/* Right Col: Pledge Form */}
+            <div className="w-full md:w-7/12 p-4 md:p-8 overflow-y-auto">
+              <div className="mb-4 md:mb-6">
+                <h2 className="font-serif text-xl md:text-2xl font-bold text-secondary">
+                  {t.modal.title}
+                </h2>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Supporting: <span className="font-semibold text-secondary">{child.name}</span>
+                </p>
+              </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-8 pb-4">
-                {/* Step 1: Amount */}
-                <div className="space-y-4">
-                  <h4 className="font-medium text-gray-900 text-sm md:text-base">{t.modal.step1}</h4>
-                  <div className="grid grid-cols-1 gap-2 md:gap-4">
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                {/* Step 1: Contribution Amount */}
+                <div className="space-y-2.5">
+                  <h4 className="font-semibold text-gray-900 text-xs md:text-sm uppercase tracking-wide">
+                    {t.modal.step1}
+                  </h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    {/* Recommended Yearly */}
                     <label className={clsx(
-                      "flex items-center p-3 md:p-4 border rounded-lg md:rounded-xl cursor-pointer transition-all",
-                      formData.amountType === 'full' ? 'border-primary bg-orange-50 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'
+                      "flex items-center justify-between p-3 md:p-3.5 border rounded-xl cursor-pointer transition-all",
+                      formData.amountType === 'yearly' 
+                        ? 'border-primary bg-orange-50/70 ring-1 ring-primary' 
+                        : 'border-gray-200 hover:border-gray-300'
                     )}>
-                      <input 
-                        type="radio" 
-                        name="amount" 
-                        value="full"
-                        checked={formData.amountType === 'full'}
-                        onChange={(e) => setFormData({...formData, amountType: e.target.value})}
-                        className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
-                      />
-                      <span className="ml-3 font-medium text-secondary">{t.modal.option_full}</span>
+                      <div className="flex items-center">
+                        <input 
+                          type="radio" 
+                          name="amountType" 
+                          value="yearly"
+                          checked={formData.amountType === 'yearly'}
+                          onChange={() => setFormData({...formData, amountType: 'yearly'})}
+                          className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                        />
+                        <span className="ml-3 font-medium text-xs md:text-sm text-secondary">
+                          {t.modal.option_yearly}
+                        </span>
+                      </div>
+                      <span className="font-bold text-sm md:text-base text-primary">
+                        CHF {recommendedAmount} / yr
+                      </span>
                     </label>
 
+                    {/* Custom / One-time */}
                     <label className={clsx(
-                      "flex flex-col p-4 border rounded-xl cursor-pointer transition-all",
-                      formData.amountType === 'any' ? 'border-primary bg-orange-50 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'
+                      "flex flex-col p-3 md:p-3.5 border rounded-xl cursor-pointer transition-all",
+                      formData.amountType === 'custom' 
+                        ? 'border-primary bg-orange-50/70 ring-1 ring-primary' 
+                        : 'border-gray-200 hover:border-gray-300'
                     )}>
-                      <div className="flex items-center mb-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
                           <input 
                             type="radio" 
-                            name="amount" 
-                            value="any"
-                            checked={formData.amountType === 'any'}
-                            onChange={(e) => setFormData({...formData, amountType: e.target.value})}
+                            name="amountType" 
+                            value="custom"
+                            checked={formData.amountType === 'custom'}
+                            onChange={() => setFormData({...formData, amountType: 'custom'})}
                             className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
                           />
-                          <span className="ml-3 font-medium text-secondary">{t.modal.option_any}</span>
+                          <span className="ml-3 font-medium text-xs md:text-sm text-secondary">
+                            {t.modal.option_any}
+                          </span>
+                        </div>
                       </div>
-                      
-                      {formData.amountType === 'any' && (
-                          <div className="ml-7 mt-2">
-                             <div className="relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">CHF</span>
-                                <input 
-                                    type="number"
-                                    min="1"
-                                    placeholder="50"
-                                    className="w-full pl-12 pr-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-                                    value={formData.customAmount}
-                                    onChange={(e) => setFormData({...formData, customAmount: e.target.value})}
-                                    onClick={(e) => e.stopPropagation()} // Prevent triggering parent label click
-                                />
-                             </div>
+
+                      {formData.amountType === 'custom' && (
+                        <div className="ml-7 mt-2.5">
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-semibold">CHF</span>
+                            <input 
+                              type="number"
+                              min="1"
+                              placeholder="e.g. 50"
+                              required={formData.amountType === 'custom'}
+                              className="w-full pl-12 pr-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm font-semibold"
+                              value={formData.customAmount}
+                              onChange={(e) => setFormData({...formData, customAmount: e.target.value})}
+                              onClick={(e) => e.stopPropagation()}
+                            />
                           </div>
+                        </div>
                       )}
                     </label>
                   </div>
                 </div>
 
-                {/* Step 2: Details */}
-                <div className="space-y-4">
-                  <h4 className="font-medium text-gray-900 text-sm md:text-base">{t.modal.step2}</h4>
-                  <div className="grid grid-cols-1 gap-3 md:gap-4">
+                {/* Step 2: Contact Details */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-900 text-xs md:text-sm uppercase tracking-wide">
+                    {t.modal.step2}
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1">
-                        {t.modal.label_name}
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        {t.modal.label_name} *
                       </label>
                       <input 
                         type="text" 
                         required
-                        className="w-full px-3 py-2 md:px-4 md:py-3 rounded-md md:rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none text-sm"
+                        placeholder="John Doe"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-xs md:text-sm"
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1">
-                        {t.modal.label_email}
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        {t.modal.label_email} *
                       </label>
                       <input 
                         type="email" 
                         required
-                        className="w-full px-3 py-2 md:px-4 md:py-3 rounded-md md:rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none text-sm"
+                        placeholder="john@example.com"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-xs md:text-sm"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                       />
                     </div>
                   </div>
 
-                  <label className="flex items-center space-x-3 mt-4">
+                  {/* Phone / Mobile */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-xs font-medium text-gray-700">
+                        {t.modal.label_phone}
+                      </label>
+                      <span className="text-[10px] text-gray-400">
+                        {t.modal.label_phone_hint}
+                      </span>
+                    </div>
                     <input 
-                      type="checkbox" 
-                      className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
-                      checked={formData.taxReceipt}
-                      onChange={(e) => setFormData({...formData, taxReceipt: e.target.checked})}
+                      type="tel" 
+                      placeholder="+41 79 123 45 67"
+                      className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-xs md:text-sm"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     />
-                    <span className="text-sm text-gray-600">{t.modal.label_tax}</span>
-                  </label>
+                  </div>
+
+                  {/* Tax Receipt Checkbox */}
+                  <div className="pt-1">
+                    <label className="flex items-start space-x-2.5 cursor-pointer">
+                      <input 
+                        type="checkbox" 
+                        className="w-4 h-4 mt-0.5 text-primary rounded border-gray-300 focus:ring-primary"
+                        checked={formData.taxReceipt}
+                        onChange={(e) => setFormData({...formData, taxReceipt: e.target.checked})}
+                      />
+                      <span className="text-xs text-gray-700 font-medium flex items-center">
+                        <FileText className="w-3.5 h-3.5 mr-1 text-primary shrink-0" />
+                        {t.modal.label_tax}
+                      </span>
+                    </label>
+
+                    {/* Postal Address fields (revealed if tax receipt is requested) */}
+                    {formData.taxReceipt && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="mt-3 p-3 bg-gray-50 rounded-xl border border-gray-200/80 space-y-2.5"
+                      >
+                        <div>
+                          <label className="block text-[11px] font-medium text-gray-600 mb-0.5">
+                            {t.modal.label_address} *
+                          </label>
+                          <input 
+                            type="text"
+                            required={formData.taxReceipt}
+                            placeholder="Musterstrasse 12"
+                            className="w-full px-3 py-1.5 rounded-md border border-gray-300 text-xs outline-none focus:border-primary"
+                            value={formData.address}
+                            onChange={(e) => setFormData({...formData, address: e.target.value})}
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 mb-0.5">
+                              {t.modal.label_zip_city} *
+                            </label>
+                            <input 
+                              type="text"
+                              required={formData.taxReceipt}
+                              placeholder="3186 Düdingen"
+                              className="w-full px-3 py-1.5 rounded-md border border-gray-300 text-xs outline-none focus:border-primary"
+                              value={formData.zipCity}
+                              onChange={(e) => setFormData({...formData, zipCity: e.target.value})}
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 mb-0.5">
+                              {t.modal.label_country}
+                            </label>
+                            <input 
+                              type="text"
+                              placeholder="Switzerland"
+                              className="w-full px-3 py-1.5 rounded-md border border-gray-300 text-xs outline-none focus:border-primary"
+                              value={formData.country}
+                              onChange={(e) => setFormData({...formData, country: e.target.value})}
+                            />
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
                 </div>
 
                 <Button 
@@ -252,8 +384,9 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
                   fullWidth 
                   size="lg"
                   disabled={isSubmitting}
+                  className="mt-4"
                 >
-                  {isSubmitting ? 'Processing...' : t.modal.btn_submit}
+                  {isSubmitting ? 'Processing Pledge...' : t.modal.btn_submit}
                 </Button>
               </form>
             </div>

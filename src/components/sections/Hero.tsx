@@ -83,23 +83,23 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center lg:text-left space-y-8"
+          className="text-center lg:text-left space-y-6 md:space-y-8"
         >
-          <h1 className="text-5xl md:text-7xl font-bold text-secondary leading-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-secondary leading-tight">
             {t.hero.title}
           </h1>
           
-          <p className="text-lg md:text-xl text-primary font-medium italic -mt-4">
+          <p className="text-base md:text-xl text-primary font-medium italic -mt-2 md:-mt-4">
             {/* @ts-ignore */}
             {t.hero.tagline}
           </p>
           
-          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto lg:mx-0 font-light">
+          <p className="text-base md:text-2xl text-gray-600 max-w-2xl mx-auto lg:mx-0 font-light">
             {t.hero.subtitle}
           </p>
 
           <div className="max-w-md mx-auto lg:mx-0 space-y-2">
-            <div className="flex justify-between text-sm font-medium text-gray-500">
+            <div className="flex justify-between text-xs md:text-sm font-medium text-gray-500">
               <span>CHF {stats.totalRaised.toLocaleString()}</span>
               <span>CHF {GOAL.toLocaleString()}</span>
             </div>
@@ -113,10 +113,19 @@ export const Hero = () => {
             </div>
           </div>
 
-          <div className="pt-4">
-            <Button size="lg" onClick={scrollToCatalog}>
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+            <Button size="lg" onClick={scrollToCatalog} className="w-full sm:w-auto">
               {t.hero.cta}
             </Button>
+            <button 
+              onClick={() => {
+                const el = document.getElementById('about');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="w-full sm:w-auto px-6 py-3 rounded-full border border-gray-300 hover:border-primary text-secondary hover:text-primary text-xs md:text-sm font-semibold transition-colors bg-white/70 backdrop-blur-xs"
+            >
+              {t.hero.about_cta}
+            </button>
           </div>
         </motion.div>
 
