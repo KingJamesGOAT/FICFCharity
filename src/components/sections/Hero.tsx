@@ -85,11 +85,11 @@ export const Hero = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center lg:text-left space-y-6 md:space-y-8"
         >
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-secondary leading-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif font-bold text-secondary leading-none tracking-tight">
             {t.hero.title}
           </h1>
           
-          <p className="text-base md:text-xl text-primary font-medium italic -mt-2 md:-mt-4">
+          <p className="text-xl sm:text-2xl md:text-3xl text-primary font-serif font-semibold -mt-2 md:-mt-4">
             {/* @ts-ignore */}
             {t.hero.tagline}
           </p>

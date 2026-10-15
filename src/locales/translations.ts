@@ -8,8 +8,8 @@ export const translations = {
       contact: "Contact",
     },
     hero: {
-      title: "Building Futures",
-      tagline: "Offering Hope and Future, Touching Hearts and Transforming Lives and Communities",
+      title: "FICF",
+      tagline: "Foundation for Indian Children's Future",
       subtitle: "Join us in celebrating 20 years of FICF by sponsoring a child's education and higher studies.",
       cta: "Meet the Children",
       about_cta: "Our 20-Year Mission",
@@ -107,8 +107,8 @@ export const translations = {
       contact: "Contact",
     },
     hero: {
-      title: "Construire l'Avenir",
-      tagline: "Offrir un Espoir et un Avenir, Toucher les Cœurs et Transformer des Vies et des Communautés",
+      title: "FICF",
+      tagline: "Foundation for Indian Children's Future",
       subtitle: "Rejoignez-nous à l'occasion des 20 ans de la FICF en parrainant l'éducation et les études supérieures d'un jeune.",
       cta: "Découvrir les enfants",
       about_cta: "Notre mission depuis 20 ans",
@@ -206,8 +206,8 @@ export const translations = {
       contact: "Kontakt",
     },
     hero: {
-      title: "Zukunft Bauen",
-      tagline: "Hoffnung und Zukunft schenken, Herzen berühren und Leben sowie Gemeinschaften verändern",
+      title: "FICF",
+      tagline: "Foundation for Indian Children's Future",
       subtitle: "Feiern Sie mit uns 20 Jahre FICF und unterstützen Sie die Ausbildung oder das Hochschulstudium eines jungen Menschen.",
       cta: "Die Kinder kennenlernen",
       about_cta: "Unsere 20-jährige Mission",

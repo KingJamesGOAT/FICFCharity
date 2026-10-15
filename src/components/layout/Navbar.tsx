@@ -113,9 +113,16 @@ export const Navbar = () => {
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }
                         }}
-                        className="text-2xl font-serif font-bold tracking-tight text-secondary relative z-[51]"
+                        className="flex items-center space-x-2.5 relative z-[51] group"
                     >
-                        FICF
+                        <img 
+                            src="/FICFCharity/assets/HeaderLOGO.jpg" 
+                            alt="FICF" 
+                            className="h-9 md:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <span className="text-xl md:text-2xl font-serif font-bold tracking-tight text-secondary">
+                            FICF
+                        </span>
                     </Link>
 
                     {/* Desktop Nav */}
