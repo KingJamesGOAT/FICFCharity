@@ -3,6 +3,9 @@
 **Google Sheet URL:**  
 [FICF Sponsorship Pledges Sheet](https://docs.google.com/spreadsheets/d/1I8iE421ocv38JtTQu84uNzxbHRCQ9f5BugFthEtahHY/edit?gid=0#gid=0)
 
+**Active Web App URL:**  
+`https://script.google.com/macros/s/AKfycbzS2wUv55tuOqqWMM30X1h_sl2vUmv-oS3UlkrjlGxEwr65LQ-D9SrI-AT_8-AZREX9/exec`
+
 ---
 
 ## 1. Sheet Column Headers (Row 1)

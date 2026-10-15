@@ -16,8 +16,8 @@ export interface PledgeData {
     language: string; // Language used during pledge
 }
 
-// Placeholder URL - User will replace this with their Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz55kLFXh9Q7e2YHzvylfKPE0C1t_21rZ_GUX5OEoQx7EY1Skk_GCK2ACFjngWKmekR/exec'; 
+// Active Google Apps Script Web App URL (Version 4)
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzS2wUv55tuOqqWMM30X1h_sl2vUmv-oS3UlkrjlGxEwr65LQ-D9SrI-AT_8-AZREX9/exec'; 
 
 export const StorageService = {
   async savePledge(data: PledgeData): Promise<void> {
