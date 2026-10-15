@@ -116,7 +116,7 @@ export const Navbar = () => {
                         className="flex items-center space-x-2.5 relative z-[51] group"
                     >
                         <img 
-                            src="/FICFCharity/assets/HeaderLOGO.jpg" 
+                            src="/FICFCharity/assets/HeaderLOGO.png" 
                             alt="FICF" 
                             className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                         />
