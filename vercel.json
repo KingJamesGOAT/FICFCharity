@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/FICFCharity/(.*)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

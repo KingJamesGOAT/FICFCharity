@@ -187,7 +187,7 @@ export const Success = () => {
               {/* Big, Crisp TWINT QR Code using twint.png */}
               <div className="p-3 bg-white rounded-2xl border-2 border-orange-100 inline-block shadow-sm">
                 <img 
-                  src="/FICFCharity/assets/payment/twint.png" 
+                  src={`${import.meta.env.BASE_URL}assets/payment/twint.png`} 
                   alt="TWINT QR Code" 
                   className="w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 object-contain mx-auto rounded-lg"
                 />
@@ -254,7 +254,7 @@ export const Success = () => {
                 </span>
                 <div className="p-3 bg-white rounded-2xl border-2 border-gray-100 inline-block shadow-sm">
                   <img 
-                    src="/FICFCharity/assets/payment/paypal.png" 
+                    src={`${import.meta.env.BASE_URL}assets/payment/paypal.png`} 
                     alt="PayPal QR Code" 
                     className="w-52 h-52 sm:w-60 sm:h-60 md:w-64 md:h-64 object-contain mx-auto"
                   />
@@ -291,7 +291,7 @@ export const Success = () => {
               {/* BIG, CLEAR Swiss QR-Bill using qr-bill.png */}
               <div className="p-3 bg-white rounded-2xl border-2 border-gray-200 inline-block shadow-sm">
                 <img 
-                  src="/FICFCharity/assets/payment/qr-bill.png" 
+                  src={`${import.meta.env.BASE_URL}assets/payment/qr-bill.png`} 
                   alt="Swiss QR Bill" 
                   className="w-56 h-auto sm:w-64 md:w-72 object-contain mx-auto rounded"
                 />
@@ -337,7 +337,7 @@ export const Success = () => {
               {/* Download Full QR Bill */}
               <div className="pt-2">
                 <a 
-                  href="/FICFCharity/assets/payment/qr-bill.png" 
+                  href={`${import.meta.env.BASE_URL}assets/payment/qr-bill.png`} 
                   download="FICF_Swiss_QR_Bill.png"
                   className="inline-flex items-center justify-center py-2.5 px-5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-xl transition-colors shadow-2xs"
                 >

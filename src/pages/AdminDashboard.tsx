@@ -12,7 +12,7 @@ export const AdminDashboard = () => {
     const [error, setError] = useState('');
     const [showEventQR, setShowEventQR] = useState(false);
 
-    const siteUrl = "https://kingjamesgoat.github.io/FICFCharity/";
+    const siteUrl = typeof window !== 'undefined' ? `${window.location.origin}${import.meta.env.BASE_URL}` : "https://ficf-charity.vercel.app/";
     const qrGeneratorUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(siteUrl)}`;
 
     const handleLogin = async (e: React.FormEvent) => {

@@ -20,7 +20,7 @@ export interface Child {
   image: string;
 }
 
-export const children: Child[] = [
+const rawChildren: Child[] = [
   {
     id: "jarwis",
     name: "S. Jarwis John",
@@ -462,5 +462,9 @@ export const children: Child[] = [
       de: "Ansiga ist 12 Jahre alt und geht in die 6. Klasse der staatlichen Schule in Moolachel. Sie und ihre Mutter leben bei den Großeltern in Pilankalai. Ansigas Vater verließ die Familie, als sie erst 52 Tage alt war, und heiratete erneut. Ihre Mutter, die körperlich beeinträchtigt ist, bestreitet den Lebensunterhalt unter großen Mühen als Tagelöhnerin. Ansiga ist ein fleißiges, aufgewecktes Mädchen, das eine Patenschaft benötigt, um die Schule erfolgreich fortzusetzen."
     },
     image: "/FICFCharity/assets/children/ansiga.png",
-  },
 ];
+
+export const children: Child[] = rawChildren.map((c) => ({
+  ...c,
+  image: `${import.meta.env.BASE_URL}${c.image.replace(/^\/?(FICFCharity\/)?/, '')}`,
+}));

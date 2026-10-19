@@ -110,7 +110,7 @@ export const About20Years = () => {
 
           <div className="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto">
             <a 
-              href="/FICFCharity/FICF_Doc/What is FICF_EN.pdf"
+              href={`${import.meta.env.BASE_URL}FICF_Doc/What is FICF_EN.pdf`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-4 py-2.5 bg-white border border-gray-200 hover:border-primary text-secondary text-xs font-semibold rounded-xl shadow-xs transition-colors"
@@ -120,7 +120,7 @@ export const About20Years = () => {
             </a>
 
             <a 
-              href="/FICFCharity/FICF_Doc/FICF_20th_Anniversary_Donor_Support_EN.pdf"
+              href={`${import.meta.env.BASE_URL}FICF_Doc/FICF_20th_Anniversary_Donor_Support_EN.pdf`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-4 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"

@@ -24,7 +24,7 @@ export const Navbar = () => {
 
     // Scroll spy for home page
     useEffect(() => {
-        if (location.pathname !== '/' && location.pathname !== '/FICFCharity/') {
+        if (location.pathname !== '/') {
             setActiveSection('');
             return;
         }
@@ -108,7 +108,7 @@ export const Navbar = () => {
                     <Link
                         to="/"
                         onClick={(e) => {
-                            if (window.location.pathname === '/' || window.location.pathname === '/FICFCharity/') {
+                            if (location.pathname === '/') {
                                 e.preventDefault();
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }
@@ -116,7 +116,7 @@ export const Navbar = () => {
                         className="flex items-center space-x-2.5 relative z-[51] group"
                     >
                         <img 
-                            src="/FICFCharity/assets/HeaderLOGO.png" 
+                            src={`${import.meta.env.BASE_URL}assets/HeaderLOGO.png`} 
                             alt="FICF" 
                             className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                         />
@@ -132,7 +132,7 @@ export const Navbar = () => {
                                     const isHashLink = link.href.includes('#');
                                     if (isHashLink) {
                                         const targetId = link.href.split('#')[1];
-                                        const isHomePage = window.location.pathname === '/' || window.location.pathname === '/FICFCharity/';
+                                        const isHomePage = location.pathname === '/';
 
                                         if (isHomePage) {
                                             e.preventDefault();
@@ -258,7 +258,7 @@ export const Navbar = () => {
                                                 
                                                 if (isHashLink) {
                                                     const targetId = link.href.split('#')[1];
-                                                    const isHomePage = window.location.pathname === '/' || window.location.pathname === '/FICFCharity/';
+                                                    const isHomePage = location.pathname === '/';
                                                     
                                                     if (isHomePage) {
                                                         e.preventDefault();
