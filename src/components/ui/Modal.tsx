@@ -11,16 +11,18 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   child: Child | null;
+  isYearlySponsored?: boolean;
+  onPledgeSuccess?: (childId: string, type: 'yearly' | 'one-time') => void;
 }
 
-export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
+export const Modal = ({ isOpen, onClose, child, isYearlySponsored = false, onPledgeSuccess }: ModalProps) => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
-    amountType: 'custom', // Default to 'custom' (one-time contribution)
-    customAmount: '50',
+    amountType: isYearlySponsored ? 'custom' : 'yearly',
+    customAmount: isYearlySponsored ? '50' : '',
     name: '',
     email: '',
     phone: '',
@@ -31,16 +33,16 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
     paymentMethod: 'twint', // 'twint' | 'paypal' | 'bank'
   });
 
-  // Reset amount when child changes
+  // Reset amount when child changes or sponsorship status updates
   useEffect(() => {
     if (child) {
       setFormData(prev => ({
         ...prev,
-        amountType: 'custom',
-        customAmount: prev.customAmount || '50',
+        amountType: isYearlySponsored ? 'custom' : 'yearly',
+        customAmount: isYearlySponsored ? (prev.customAmount || '50') : '',
       }));
     }
-  }, [child]);
+  }, [child, isYearlySponsored]);
 
   // Scroll locking
   useEffect(() => {
@@ -62,7 +64,9 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const finalAmount = Number(formData.customAmount);
+    const finalAmount = formData.amountType === 'yearly' 
+      ? recommendedAmount 
+      : Number(formData.customAmount);
 
     if (finalAmount <= 0 || isNaN(finalAmount)) {
       alert("Please enter a valid contribution amount greater than 0.");
@@ -70,6 +74,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
       return;
     }
 
+    const pledgeType: 'yearly' | 'one-time' = formData.amountType === 'yearly' ? 'yearly' : 'one-time';
     const refCode = `FICF-${Math.floor(100000 + Math.random() * 900000)}`;
 
     const pledgeData = {
@@ -83,7 +88,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
       zipCity: formData.zipCity || '',
       country: formData.country || 'Switzerland',
       amount: finalAmount,
-      type: 'one-time', // Yearly sponsorship in Google Sheets is no longer available
+      type: pledgeType,
       taxReceipt: formData.taxReceipt,
       paymentMethod: formData.paymentMethod,
       refCode,
@@ -91,6 +96,12 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
     } as const;
 
     try {
+      if (pledgeType === 'yearly') {
+        const { StorageService: Storage } = await import('../../services/StorageService');
+        Storage.recordLocalYearlySponsorship(child.id);
+        onPledgeSuccess?.(child.id, 'yearly');
+      }
+
       // 1. Save to Google Sheet
       const { StorageService } = await import('../../services/StorageService');
       await StorageService.savePledge(pledgeData);
@@ -186,92 +197,133 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
                   </h4>
                   
                   <div className="grid grid-cols-1 gap-2.5">
-                    {/* Active Option: Contribution / One-Time Donation */}
-                    <div className="p-3.5 sm:p-4 border-2 border-primary bg-orange-50/70 rounded-xl shadow-xs transition-all">
-                      <div className="flex items-center justify-between mb-2">
+                    {/* Option 1: Yearly Sponsorship (Available unless already taken) */}
+                    {!isYearlySponsored ? (
+                      <label className={clsx(
+                        "flex items-center justify-between p-3.5 sm:p-4 border rounded-xl cursor-pointer transition-all",
+                        formData.amountType === 'yearly' 
+                          ? 'border-primary bg-orange-50/80 ring-2 ring-primary shadow-xs' 
+                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                      )}>
                         <div className="flex items-center space-x-2.5">
                           <input 
                             type="radio" 
                             name="amountType" 
-                            value="custom"
-                            checked={true}
-                            readOnly
-                            className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                            value="yearly"
+                            checked={formData.amountType === 'yearly'}
+                            onChange={() => setFormData({ ...formData, amountType: 'yearly' })}
+                            className="w-4 h-4 text-primary focus:ring-primary border-gray-300 cursor-pointer"
                           />
                           <span className="font-bold text-xs sm:text-sm text-secondary">
-                            {t.modal.option_any}
+                            {t.modal.option_yearly}
                           </span>
                         </div>
-                        <span className="text-[11px] font-semibold text-primary bg-white px-2 py-0.5 rounded-full border border-orange-200 shadow-2xs">
-                          CHF {formData.customAmount || '0'}
+                        <span className="font-extrabold text-sm sm:text-base text-primary">
+                          CHF {recommendedAmount} / yr
                         </span>
-                      </div>
-
-                      {/* Quick Amount Selection Chips */}
-                      <div className="flex flex-wrap gap-1.5 mb-2.5 ml-6 sm:ml-7">
-                        {[30, 50, 100, 200].map((preset) => (
-                          <button
-                            key={preset}
-                            type="button"
-                            onClick={() => setFormData(prev => ({ ...prev, customAmount: String(preset) }))}
-                            className={clsx(
-                              "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
-                              formData.customAmount === String(preset)
-                                ? "bg-primary text-white shadow-xs"
-                                : "bg-white text-gray-700 hover:bg-orange-100 border border-orange-200/80"
-                            )}
-                          >
-                            CHF {preset}
-                          </button>
-                        ))}
-                      </div>
-
-                      {/* Input Field */}
-                      <div className="ml-6 sm:ml-7">
-                        <div className="relative max-w-xs">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">CHF</span>
-                          <input 
-                            type="number"
-                            min="1"
-                            inputMode="numeric"
-                            placeholder="Enter amount (e.g. 50)"
-                            required
-                            className="w-full pl-12 pr-4 py-2 rounded-lg border border-gray-300 bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm font-bold text-gray-900"
-                            value={formData.customAmount}
-                            onChange={(e) => setFormData(prev => ({ ...prev, customAmount: e.target.value }))}
-                          />
+                      </label>
+                    ) : (
+                      /* Disabled State: Already Taken */
+                      <div className="p-3.5 sm:p-4 border border-dashed border-gray-300 bg-gray-50/90 rounded-xl opacity-75 cursor-not-allowed select-none">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2.5">
+                            <input 
+                              type="radio" 
+                              name="amountType" 
+                              disabled
+                              checked={false}
+                              className="w-4 h-4 text-gray-400 border-gray-300 cursor-not-allowed"
+                            />
+                            <div>
+                              <span className="font-medium text-xs sm:text-sm text-gray-500">
+                                {t.modal.option_yearly}
+                              </span>
+                              <span className="text-[11px] text-gray-400 ml-2 line-through">
+                                CHF {recommendedAmount}/yr
+                              </span>
+                            </div>
+                          </div>
+                          <span className="text-[10px] sm:text-xs font-bold text-emerald-800 bg-emerald-100/90 px-2.5 py-0.5 rounded-full border border-emerald-300/80 shrink-0">
+                            {t.modal.option_yearly_taken}
+                          </span>
                         </div>
+                        <p className="text-[11px] text-gray-500 mt-1.5 ml-6 sm:ml-7 leading-tight">
+                          {t.modal.option_yearly_taken_desc}
+                        </p>
                       </div>
-                    </div>
+                    )}
 
-                    {/* Disabled Option: Yearly Sponsorship (Unavailable in Google Sheets) */}
-                    <div className="p-3 sm:p-3.5 border border-dashed border-gray-300 bg-gray-50/80 rounded-xl opacity-60 cursor-not-allowed select-none">
+                    {/* Option 2: One-time Contribution */}
+                    <label className={clsx(
+                      "flex flex-col p-3.5 sm:p-4 border rounded-xl cursor-pointer transition-all",
+                      formData.amountType === 'custom' 
+                        ? 'border-primary bg-orange-50/80 ring-2 ring-primary shadow-xs' 
+                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                    )}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2.5">
                           <input 
                             type="radio" 
                             name="amountType" 
-                            disabled
-                            checked={false}
-                            className="w-4 h-4 text-gray-400 border-gray-300 cursor-not-allowed"
+                            value="custom"
+                            checked={formData.amountType === 'custom'}
+                            onChange={() => setFormData({ ...formData, amountType: 'custom', customAmount: formData.customAmount || '50' })}
+                            className="w-4 h-4 text-primary focus:ring-primary border-gray-300 cursor-pointer"
                           />
-                          <div>
-                            <span className="font-medium text-xs sm:text-sm text-gray-500">
-                              {t.modal.option_yearly}
-                            </span>
-                            <span className="text-[11px] text-gray-400 ml-2 line-through">
-                              CHF {recommendedAmount}/yr
-                            </span>
+                          <span className="font-bold text-xs sm:text-sm text-secondary">
+                            {t.modal.option_any}
+                          </span>
+                        </div>
+                        {formData.amountType === 'custom' && (
+                          <span className="text-[11px] font-semibold text-primary bg-white px-2 py-0.5 rounded-full border border-orange-200 shadow-2xs">
+                            CHF {formData.customAmount || '0'}
+                          </span>
+                        )}
+                      </div>
+
+                      {formData.amountType === 'custom' && (
+                        <div className="mt-3 ml-6 sm:ml-7">
+                          {/* Quick Amount Selection Chips */}
+                          <div className="flex flex-wrap gap-1.5 mb-2.5">
+                            {[30, 50, 100, 200].map((preset) => (
+                              <button
+                                key={preset}
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setFormData(prev => ({ ...prev, customAmount: String(preset) }));
+                                }}
+                                className={clsx(
+                                  "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                                  formData.customAmount === String(preset)
+                                    ? "bg-primary text-white shadow-xs"
+                                    : "bg-white text-gray-700 hover:bg-orange-100 border border-orange-200/80"
+                                )}
+                              >
+                                CHF {preset}
+                              </button>
+                            ))}
+                          </div>
+
+                          {/* Custom Input Field */}
+                          <div className="relative max-w-xs">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">CHF</span>
+                            <input 
+                              type="number"
+                              min="1"
+                              inputMode="numeric"
+                              placeholder="e.g. 50"
+                              required={formData.amountType === 'custom'}
+                              className="w-full pl-12 pr-4 py-2 rounded-lg border border-gray-300 bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm font-bold text-gray-900"
+                              value={formData.customAmount}
+                              onChange={(e) => setFormData(prev => ({ ...prev, customAmount: e.target.value }))}
+                              onClick={(e) => e.stopPropagation()}
+                            />
                           </div>
                         </div>
-                        <span className="text-[10px] sm:text-[11px] font-semibold text-gray-500 bg-gray-200/80 px-2 py-0.5 rounded-full shrink-0">
-                          {t.modal.option_yearly_unavailable}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-gray-400 mt-1 ml-6.5 sm:ml-7 leading-tight">
-                        {t.modal.option_yearly_unavailable_desc}
-                      </p>
-                    </div>
+                      )}
+                    </label>
                   </div>
                 </div>
 
@@ -497,7 +549,12 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
                   disabled={isSubmitting}
                   className="mt-4"
                 >
-                  {isSubmitting ? 'Processing Pledge...' : t.modal.btn_submit}
+                  {isSubmitting 
+                    ? 'Processing Pledge...' 
+                    : formData.amountType === 'yearly'
+                      ? `${t.modal.btn_submit_yearly} (CHF ${recommendedAmount})`
+                      : `${t.modal.btn_submit_contribution}${formData.customAmount ? ` (CHF ${formData.customAmount})` : ''}`
+                  }
                 </Button>
               </form>
             </div>

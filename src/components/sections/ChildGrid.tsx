@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card } from '../ui/Card';
 import { Modal } from '../ui/Modal';
 import { children } from '../../data/children';
 import type { Child, ChildCategory } from '../../data/children';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { StorageService } from '../../services/StorageService';
 import { GraduationCap, BookOpen, Users } from 'lucide-react';
 
 export const ChildGrid = () => {
@@ -11,6 +12,20 @@ export const ChildGrid = () => {
   const [selectedChild, setSelectedChild] = useState<Child | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'all' | ChildCategory>('all');
+  const [sponsoredChildIds, setSponsoredChildIds] = useState<Set<string>>(new Set());
+
+  // Load live sponsored children from Google Sheet on mount
+  useEffect(() => {
+    StorageService.getSponsoredChildIds().then((ids) => {
+      setSponsoredChildIds(new Set(ids));
+    });
+  }, []);
+
+  const handlePledgeSuccess = (childId: string, type: 'yearly' | 'one-time') => {
+    if (type === 'yearly') {
+      setSponsoredChildIds((prev) => new Set([...prev, childId.toLowerCase().trim()]));
+    }
+  };
 
   const handleSponsor = (child: Child) => {
     setSelectedChild(child);
@@ -92,6 +107,7 @@ export const ChildGrid = () => {
               key={child.id} 
               child={child} 
               onSponsor={handleSponsor} 
+              isYearlySponsored={sponsoredChildIds.has(child.id.toLowerCase().trim())}
             />
           ))}
         </div>
@@ -101,6 +117,8 @@ export const ChildGrid = () => {
           isOpen={isModalOpen} 
           onClose={handleClose} 
           child={selectedChild} 
+          isYearlySponsored={selectedChild ? sponsoredChildIds.has(selectedChild.id.toLowerCase().trim()) : false}
+          onPledgeSuccess={handlePledgeSuccess}
         />
       </div>
     </section>

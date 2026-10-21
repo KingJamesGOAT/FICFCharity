@@ -65,5 +65,41 @@ export const StorageService = {
           console.error('Error fetching pledges:', error);
           return [];
       }
+  },
+
+  async getSponsoredChildIds(): Promise<string[]> {
+    try {
+      const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPledges`);
+      const data = await response.json();
+      if (!Array.isArray(data)) return [];
+
+      const yearlySponsored = data
+        .filter((p: any) => (p.type === 'yearly' || p.type === 'Yearly') && p.childId)
+        .map((p: any) => String(p.childId).toLowerCase().trim());
+
+      let localSponsored: string[] = [];
+      try {
+        localSponsored = JSON.parse(localStorage.getItem('ficf_yearly_sponsored') || '[]');
+      } catch {}
+
+      return Array.from(new Set([...yearlySponsored, ...localSponsored]));
+    } catch (error) {
+      console.error('Error fetching sponsored child IDs:', error);
+      try {
+        return JSON.parse(localStorage.getItem('ficf_yearly_sponsored') || '[]');
+      } catch {
+        return [];
+      }
+    }
+  },
+
+  recordLocalYearlySponsorship(childId: string): void {
+    try {
+      const current: string[] = JSON.parse(localStorage.getItem('ficf_yearly_sponsored') || '[]');
+      const updated = Array.from(new Set([...current, childId.toLowerCase().trim()]));
+      localStorage.setItem('ficf_yearly_sponsored', JSON.stringify(updated));
+    } catch (e) {
+      console.error('Failed to save to localStorage:', e);
+    }
   }
 };
