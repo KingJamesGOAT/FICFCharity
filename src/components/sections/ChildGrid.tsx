@@ -46,10 +46,10 @@ export const ChildGrid = () => {
           </div>
 
           {/* Filter Pills */}
-          <div className="flex flex-wrap items-center gap-1.5 md:gap-2 bg-gray-100 p-1 md:p-1.5 rounded-xl self-start md:self-auto">
+          <div className="flex items-center gap-1.5 md:gap-2 bg-gray-100/90 p-1 md:p-1.5 rounded-xl overflow-x-auto max-w-full no-scrollbar">
             <button
               onClick={() => setActiveFilter('all')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all shrink-0 cursor-pointer ${
                 activeFilter === 'all'
                   ? 'bg-white text-secondary shadow-sm font-semibold'
                   : 'text-gray-600 hover:text-secondary'
@@ -61,7 +61,7 @@ export const ChildGrid = () => {
 
             <button
               onClick={() => setActiveFilter('university')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all shrink-0 cursor-pointer ${
                 activeFilter === 'university'
                   ? 'bg-white text-primary shadow-sm font-semibold'
                   : 'text-gray-600 hover:text-secondary'
@@ -73,7 +73,7 @@ export const ChildGrid = () => {
 
             <button
               onClick={() => setActiveFilter('school')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all shrink-0 cursor-pointer ${
                 activeFilter === 'school'
                   ? 'bg-white text-primary shadow-sm font-semibold'
                   : 'text-gray-600 hover:text-secondary'
@@ -85,8 +85,8 @@ export const ChildGrid = () => {
           </div>
         </div>
 
-        {/* Grid of Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 lg:gap-8">
+        {/* Grid of Cards - 1 per row on mobile for prominent, clean presentation */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-6 lg:gap-8 max-w-sm sm:max-w-none mx-auto">
           {filteredChildren.map((child) => (
             <Card 
               key={child.id} 

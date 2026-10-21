@@ -19,8 +19,8 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
-    amountType: 'yearly', // 'yearly' | 'custom'
-    customAmount: '',
+    amountType: 'custom', // Default to 'custom' (one-time contribution)
+    customAmount: '50',
     name: '',
     email: '',
     phone: '',
@@ -36,8 +36,8 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
     if (child) {
       setFormData(prev => ({
         ...prev,
-        amountType: 'yearly',
-        customAmount: '',
+        amountType: 'custom',
+        customAmount: prev.customAmount || '50',
       }));
     }
   }, [child]);
@@ -62,9 +62,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const finalAmount = formData.amountType === 'yearly' 
-      ? recommendedAmount 
-      : Number(formData.customAmount);
+    const finalAmount = Number(formData.customAmount);
 
     if (finalAmount <= 0 || isNaN(finalAmount)) {
       alert("Please enter a valid contribution amount greater than 0.");
@@ -85,7 +83,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
       zipCity: formData.zipCity || '',
       country: formData.country || 'Switzerland',
       amount: finalAmount,
-      type: formData.amountType === 'yearly' ? 'yearly' : 'one-time',
+      type: 'one-time', // Yearly sponsorship in Google Sheets is no longer available
       taxReceipt: formData.taxReceipt,
       paymentMethod: formData.paymentMethod,
       refCode,
@@ -120,7 +118,7 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50"
             onClick={onClose}
           />
           
@@ -135,34 +133,34 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
             {/* Close Button */}
             <button 
               onClick={onClose}
-              className="absolute top-3 right-3 md:top-4 md:right-4 p-2 bg-white/90 hover:bg-gray-100 rounded-full transition-colors z-30 shadow-md text-gray-600 hover:text-black"
+              className="absolute top-3 right-3 md:top-4 md:right-4 p-2 bg-white/90 hover:bg-gray-100 rounded-full transition-colors z-30 shadow-md text-gray-600 hover:text-black cursor-pointer"
               aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Left Col: Child Info & Story */}
-            <div className="w-full md:w-5/12 bg-gray-50 p-4 md:p-6 overflow-y-auto border-b md:border-b-0 md:border-r border-gray-100 max-h-[32vh] md:max-h-full">
-              <div className="flex items-center space-x-3 md:block md:space-x-0">
-                <div className="aspect-[4/5] w-20 md:w-full rounded-xl overflow-hidden shadow-sm shrink-0 md:mb-4 bg-gray-200">
+            <div className="w-full md:w-5/12 bg-gray-50 p-4 md:p-6 overflow-y-auto border-b md:border-b-0 md:border-r border-gray-100 max-h-[28vh] md:max-h-full shrink-0">
+              <div className="flex items-center space-x-3.5 md:block md:space-x-0">
+                <div className="aspect-[4/5] w-16 sm:w-20 md:w-full rounded-xl overflow-hidden shadow-xs shrink-0 md:mb-4 bg-gray-200">
                   <img 
                     src={child.image} 
                     alt={child.name} 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <span className="text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-primary inline-block mb-1">
                     {child.category === 'university' ? t.card.higher_ed : t.card.school_ed}
                   </span>
-                  <h3 className="font-serif text-base md:text-2xl font-bold text-secondary">
+                  <h3 className="font-serif text-base sm:text-lg md:text-2xl font-bold text-secondary truncate md:whitespace-normal">
                     {child.name}
                   </h3>
-                  <p className="text-xs md:text-sm text-gray-500 font-medium">{child.education}</p>
+                  <p className="text-xs md:text-sm text-gray-500 font-medium truncate md:whitespace-normal">{child.education}</p>
                 </div>
               </div>
 
-              <div className="mt-3 md:mt-4 pt-3 border-t border-gray-200/60">
+              <div className="mt-2.5 md:mt-4 pt-2.5 md:pt-3 border-t border-gray-200/60">
                 <p className="text-gray-700 leading-relaxed text-xs md:text-sm whitespace-pre-line">
                   {child.story[language] || child.story.en}
                 </p>
@@ -186,73 +184,94 @@ export const Modal = ({ isOpen, onClose, child }: ModalProps) => {
                   <h4 className="font-semibold text-gray-900 text-xs md:text-sm uppercase tracking-wide">
                     {t.modal.step1}
                   </h4>
-                  <div className="grid grid-cols-1 gap-2">
-                    {/* Recommended Yearly */}
-                    <label className={clsx(
-                      "flex items-center justify-between p-3 md:p-3.5 border rounded-xl cursor-pointer transition-all",
-                      formData.amountType === 'yearly' 
-                        ? 'border-primary bg-orange-50/70 ring-1 ring-primary' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    )}>
-                      <div className="flex items-center">
-                        <input 
-                          type="radio" 
-                          name="amountType" 
-                          value="yearly"
-                          checked={formData.amountType === 'yearly'}
-                          onChange={() => setFormData({...formData, amountType: 'yearly'})}
-                          className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
-                        />
-                        <span className="ml-3 font-medium text-xs md:text-sm text-secondary">
-                          {t.modal.option_yearly}
-                        </span>
-                      </div>
-                      <span className="font-bold text-sm md:text-base text-primary">
-                        CHF {recommendedAmount} / yr
-                      </span>
-                    </label>
-
-                    {/* Custom / One-time */}
-                    <label className={clsx(
-                      "flex flex-col p-3 md:p-3.5 border rounded-xl cursor-pointer transition-all",
-                      formData.amountType === 'custom' 
-                        ? 'border-primary bg-orange-50/70 ring-1 ring-primary' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    )}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
+                  
+                  <div className="grid grid-cols-1 gap-2.5">
+                    {/* Active Option: Contribution / One-Time Donation */}
+                    <div className="p-3.5 sm:p-4 border-2 border-primary bg-orange-50/70 rounded-xl shadow-xs transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2.5">
                           <input 
                             type="radio" 
                             name="amountType" 
                             value="custom"
-                            checked={formData.amountType === 'custom'}
-                            onChange={() => setFormData({...formData, amountType: 'custom'})}
+                            checked={true}
+                            readOnly
                             className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
                           />
-                          <span className="ml-3 font-medium text-xs md:text-sm text-secondary">
+                          <span className="font-bold text-xs sm:text-sm text-secondary">
                             {t.modal.option_any}
                           </span>
                         </div>
+                        <span className="text-[11px] font-semibold text-primary bg-white px-2 py-0.5 rounded-full border border-orange-200 shadow-2xs">
+                          CHF {formData.customAmount || '0'}
+                        </span>
                       </div>
 
-                      {formData.amountType === 'custom' && (
-                        <div className="ml-7 mt-2.5">
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-semibold">CHF</span>
-                            <input 
-                              type="number"
-                              min="1"
-                              placeholder="e.g. 50"
-                              required={formData.amountType === 'custom'}
-                              className="w-full pl-12 pr-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm font-semibold"
-                              value={formData.customAmount}
-                              onChange={(e) => setFormData({...formData, customAmount: e.target.value})}
-                              onClick={(e) => e.stopPropagation()}
-                            />
+                      {/* Quick Amount Selection Chips */}
+                      <div className="flex flex-wrap gap-1.5 mb-2.5 ml-6 sm:ml-7">
+                        {[30, 50, 100, 200].map((preset) => (
+                          <button
+                            key={preset}
+                            type="button"
+                            onClick={() => setFormData(prev => ({ ...prev, customAmount: String(preset) }))}
+                            className={clsx(
+                              "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                              formData.customAmount === String(preset)
+                                ? "bg-primary text-white shadow-xs"
+                                : "bg-white text-gray-700 hover:bg-orange-100 border border-orange-200/80"
+                            )}
+                          >
+                            CHF {preset}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Input Field */}
+                      <div className="ml-6 sm:ml-7">
+                        <div className="relative max-w-xs">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">CHF</span>
+                          <input 
+                            type="number"
+                            min="1"
+                            inputMode="numeric"
+                            placeholder="Enter amount (e.g. 50)"
+                            required
+                            className="w-full pl-12 pr-4 py-2 rounded-lg border border-gray-300 bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm font-bold text-gray-900"
+                            value={formData.customAmount}
+                            onChange={(e) => setFormData(prev => ({ ...prev, customAmount: e.target.value }))}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Disabled Option: Yearly Sponsorship (Unavailable in Google Sheets) */}
+                    <div className="p-3 sm:p-3.5 border border-dashed border-gray-300 bg-gray-50/80 rounded-xl opacity-60 cursor-not-allowed select-none">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2.5">
+                          <input 
+                            type="radio" 
+                            name="amountType" 
+                            disabled
+                            checked={false}
+                            className="w-4 h-4 text-gray-400 border-gray-300 cursor-not-allowed"
+                          />
+                          <div>
+                            <span className="font-medium text-xs sm:text-sm text-gray-500">
+                              {t.modal.option_yearly}
+                            </span>
+                            <span className="text-[11px] text-gray-400 ml-2 line-through">
+                              CHF {recommendedAmount}/yr
+                            </span>
                           </div>
                         </div>
-                      )}
-                    </label>
+                        <span className="text-[10px] sm:text-[11px] font-semibold text-gray-500 bg-gray-200/80 px-2 py-0.5 rounded-full shrink-0">
+                          {t.modal.option_yearly_unavailable}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-gray-400 mt-1 ml-6.5 sm:ml-7 leading-tight">
+                        {t.modal.option_yearly_unavailable_desc}
+                      </p>
+                    </div>
                   </div>
                 </div>
 

@@ -18,11 +18,11 @@ export const Card = ({ child, onSponsor }: CardProps) => {
 
   return (
     <motion.div
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 300 }}
-      className="bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-soft group hover:shadow-lg transition-all duration-300 flex flex-col h-full border border-gray-100"
+      className="bg-white rounded-2xl overflow-hidden shadow-soft group hover:shadow-lg transition-all duration-300 flex flex-col h-full border border-gray-100"
     >
-      {/* Image Container */}
+      {/* Clean Unobstructed Image Container */}
       <div className="aspect-[4/5] relative bg-gray-100 overflow-hidden">
         {!imageError ? (
           <img
@@ -37,56 +37,52 @@ export const Card = ({ child, onSponsor }: CardProps) => {
             {child.name.split(' ').map(n => n[0]).join('')}
           </div>
         )}
-        
-        {/* Category & Amount Floating Badge */}
-        <div className="absolute top-2 left-2 right-2 flex justify-between items-center pointer-events-none">
-          <span className={`text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full shadow-sm backdrop-blur-md border ${
-            isUniversity 
-              ? 'bg-amber-900/80 text-amber-100 border-amber-700/50' 
-              : 'bg-emerald-900/80 text-emerald-100 border-emerald-700/50'
-          }`}>
-            {isUniversity ? t.card.higher_ed : t.card.school_ed}
-          </span>
-          <span className="text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full bg-white/90 text-secondary shadow-sm backdrop-blur-md">
-            CHF {child.recommendedAmount}/yr
-          </span>
-        </div>
       </div>
 
       {/* Content */}
-      <div className="p-3 md:p-5 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-1 md:mb-2">
-          <h3 className="font-serif text-sm md:text-lg font-bold text-secondary line-clamp-1 group-hover:text-primary transition-colors">
-            {child.name}
-          </h3>
-          <span className="text-[10px] md:text-xs font-semibold text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-full ml-1 shrink-0">
+      <div className="p-4 sm:p-5 flex flex-col flex-grow">
+        {/* Category & Age */}
+        <div className="flex items-center justify-between mb-2">
+          <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
+            isUniversity 
+              ? 'bg-amber-50 text-amber-800 border border-amber-200/60' 
+              : 'bg-emerald-50 text-emerald-800 border border-emerald-200/60'
+          }`}>
+            {isUniversity ? t.card.higher_ed : t.card.school_ed}
+          </span>
+          <span className="text-xs text-gray-500 font-medium">
             {child.age} {t.card.age}
           </span>
         </div>
 
-        {/* Education & Dream */}
-        <div className="space-y-1 mb-2 md:mb-4 flex-grow">
-          <div className="flex items-center text-gray-600 text-[11px] md:text-xs font-medium">
+        {/* Full Name - Never truncated */}
+        <h3 className="font-serif text-base sm:text-lg font-bold text-secondary group-hover:text-primary transition-colors leading-snug mb-1.5">
+          {child.name}
+        </h3>
+
+        {/* Education & Location */}
+        <div className="space-y-1 mb-4 flex-grow">
+          <div className="flex items-center text-gray-600 text-xs font-medium">
             {isUniversity ? (
               <GraduationCap className="w-3.5 h-3.5 mr-1.5 text-primary shrink-0" />
             ) : (
               <BookOpen className="w-3.5 h-3.5 mr-1.5 text-primary shrink-0" />
             )}
-            <span className="truncate">{child.education}</span>
+            <span className="leading-tight">{child.education}</span>
           </div>
 
-          <div className="flex items-center text-gray-400 text-[11px] md:text-xs hidden md:flex">
-            <MapPin className="w-3.5 h-3.5 mr-1.5 text-muted shrink-0" />
-            <span className="truncate">{child.location}</span>
+          <div className="flex items-center text-gray-400 text-xs">
+            <MapPin className="w-3.5 h-3.5 mr-1.5 text-gray-400 shrink-0" />
+            <span>{child.location}</span>
           </div>
         </div>
 
-        {/* CTA Button */}
+        {/* Action Button */}
         <Button 
           variant="outline" 
           fullWidth 
           onClick={() => onSponsor(child)}
-          className="text-xs md:text-sm py-1.5 md:py-2 h-auto min-h-0 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-colors mt-auto"
+          className="text-xs sm:text-sm py-2 sm:py-2.5 h-auto group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-colors mt-auto font-semibold"
         >
           {t.card.sponsor_btn}
         </Button>
