@@ -6,7 +6,7 @@ export const Contact = () => {
   const { contact } = t;
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 py-20 px-6">
+    <div className="min-h-[85vh] flex items-center justify-center bg-gray-50 pt-28 sm:pt-32 pb-20 px-4 sm:px-6">
       <div className="max-w-6xl w-full mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-secondary mb-4">

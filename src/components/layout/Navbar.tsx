@@ -100,10 +100,12 @@ export const Navbar = () => {
             <nav
                 className={clsx(
                     'fixed top-0 left-0 right-0 z-[50] transition-all duration-300',
-                    isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
+                    isScrolled 
+                        ? 'bg-white/95 backdrop-blur-md shadow-xs py-2.5 sm:py-3 border-b border-gray-100' 
+                        : 'bg-white/90 backdrop-blur-md py-3 sm:py-3.5 border-b border-gray-100/60'
                 )}
             >
-                <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
                     {/* Logo */}
                     <Link
                         to="/"
@@ -118,7 +120,7 @@ export const Navbar = () => {
                         <img 
                             src={`${import.meta.env.BASE_URL}assets/HeaderLOGO.png`} 
                             alt="FICF" 
-                            className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                            className="h-8 sm:h-9 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                     </Link>
 

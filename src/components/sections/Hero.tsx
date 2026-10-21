@@ -74,7 +74,7 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center pt-20 overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100">
+    <section className="relative min-h-[90vh] flex items-center justify-center pt-28 sm:pt-32 md:pt-36 pb-16 md:pb-24 overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100">
       
       <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
